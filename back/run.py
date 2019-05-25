@@ -1,0 +1,9 @@
+from template.core import logger
+from template import create_app
+
+app = create_app()
+
+if __name__ == '__main__':
+    logger.info('Starting Template API ...')
+    app.run(host='0.0.0.0', port=5000, threaded=True)
+    logger.info('End of Template')

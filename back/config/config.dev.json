@@ -1,0 +1,36 @@
+{
+  "database": {
+    "host": "localhost",
+    "user": "template",
+    "password": "template"
+  },
+  "aws": {
+    "access_key": "AKIAIOSFODNN7EXAMPLE",
+    "private_key": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+    "endpoint": "http://localhost:9000/",
+    "elastic": "http://localhost:9200/"
+  },
+  "cache": {
+    "host": "localhost",
+    "url": "redis://localhost:6379/1"
+  },
+  "storage": {
+    "access_key": "AKIAIOSFODNN7EXAMPLE",
+    "private_key": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+    "endpoint": "http://localhost:9000/",
+    "bucket": "template-storage"
+  },
+  "oauth": {
+    "google_config": "./config/google.json",
+    "callback": "http://localhost:5000/auth/callback",
+    "front_callback": "http://localhost:8080/#/auth/callback"
+  },
+  "log": "DEBUG",
+  "flask": {
+    "env": "development",
+    "debug": true,
+    "oauth_secret": "test_token",
+    "jwt_secret": "test_token",
+    "jwt_expiration": 2592000
+  }
+}
