@@ -1,4 +1,4 @@
-import axios from 'axios';
+ import axios from 'axios';
 
 let store = {
   jobs: []
@@ -24,7 +24,7 @@ function addJob(job_id)  {
 
 function getJob(job) {
   return new Promise(function(resolve) {
-    axios.get(process.env.API_URL + '/jobs/' + job.id).then((response) => {
+    axios.get(process.env.VUE_APP_API_URL + '/jobs/' + job.id).then((response) => {
       let progress = response.data.meta.progress;
       if (progress > 0) {
         job.progress = progress;
@@ -67,7 +67,7 @@ function removeAllJobs() {
 }
 
 function getJobs() {
-  axios.get(process.env.API_URL + '/jobs').then((response) => {
+  axios.get(process.env.VUE_APP_API_URL + '/jobs').then((response) => {
     store.jobs = [];
     response.data.jobs.forEach((job_id) => {
       addJob(job_id);

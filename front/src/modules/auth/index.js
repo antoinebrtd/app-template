@@ -7,7 +7,7 @@ let user = {
 };
 
 function login(context) {
-  axios.get(process.env.AUTH_URL + '/login')
+  axios.get(process.env.VUE_APP_AUTH_URL + '/login')
     .then((response) => {
       if (response.status === 200) {
         window.location.replace(response.data.url);
@@ -27,7 +27,7 @@ function login(context) {
 }
 
 function authorize(context, code, state) {
-  axios.get(process.env.AUTH_URL + '/authorize?code=' + code + '&state=' + state)
+  axios.get(process.env.VUE_APP_AUTH_URL + '/authorize?code=' + code + '&state=' + state)
     .then(function (response) {
       if (response.status === 200) {
         localStorage.setItem('access_token', response.data.access_token);
@@ -64,7 +64,7 @@ function checkAuth() {
     if (jwt !== null) {
       user.authenticated = true;
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + jwt;
-      axios.get(process.env.API_URL + '/me')
+      axios.get(process.env.VUE_APP_API_URL + '/me')
         .then(function (response) {
           user.authenticated = response.status === 200;
           if (!user.authenticated) {

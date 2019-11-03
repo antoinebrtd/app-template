@@ -19,7 +19,7 @@
 
 <script>
   import auth from "../../modules/auth/index";
-  import jobs from '@/modules/jobs';
+  import jobs from '../../modules/jobs';
 
 
   export default {

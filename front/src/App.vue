@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import AdvancedHeader from '@/components/util/AdvancedHeader';
+  import AdvancedHeader from './components/util/AdvancedHeader';
   import auth from './modules/auth';
 
   export default {
@@ -125,23 +125,4 @@
   table.v-table thead th {
     font-size: 14px !important;
   }
-</style>
-
-<style lang="stylus">
-  $font-weights := {
-      thin: 100,
-      light: 100,
-      regular: 200,
-      medium: 300,
-      bold: 500,
-      black: 900
-  }
-
-  $heading-font-family = 'Quicksand'
-  $body-font-family = 'Montserrat'
-
-  $body-bg-dark = '#323232'
-  $body-bg-light = '#ffffff'
-
-  @import '../node_modules/vuetify/src/stylus/main'
 </style>

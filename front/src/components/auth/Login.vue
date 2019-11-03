@@ -4,11 +4,11 @@
       <v-layout row justify-center>
         <v-flex xs12 sm6>
           <v-card flat id="card" color="transparent">
-            <v-card-title primary-title>
+            <v-card-text primary-title>
               <div class="text">
                 <v-btn block v-on:click="login" id="connect">Log in</v-btn>
               </div>
-            </v-card-title>
+            </v-card-text>
           </v-card>
         </v-flex>
       </v-layout>

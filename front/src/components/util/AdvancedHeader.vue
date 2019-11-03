@@ -3,7 +3,7 @@
     <transition name="fade" appear>
       <v-toolbar fixed class="menu-header elevation-1">
         <v-toolbar-items>
-          <v-btn flat class="logo" to="/home">
+          <v-btn text class="logo" to="/home">
           </v-btn>
         </v-toolbar-items>
         <v-spacer></v-spacer>
@@ -20,31 +20,31 @@
 
               <v-card>
                 <v-list>
-                  <v-list-tile avatar>
-                    <v-list-tile-avatar>
+                  <v-list-item avatar>
+                    <v-list-item-avatar>
                       <img :src="user.profile.picture" :alt="user.profile.name">
-                    </v-list-tile-avatar>
+                    </v-list-item-avatar>
 
-                    <v-list-tile-content>
-                      <v-list-tile-title>{{ user.profile.name }}</v-list-tile-title>
-                    </v-list-tile-content>
-                  </v-list-tile>
+                    <v-list-item-group>
+                      <v-list-item-group>{{ user.profile.name }}</v-list-item-group>
+                    </v-list-item-group>
+                  </v-list-item>
                 </v-list>
 
                 <v-divider></v-divider>
 
                 <v-list>
-                  <v-list-tile>
-                    <v-list-tile-action>
+                  <v-list-item>
+                    <v-list-item-action>
                       <v-switch v-model="jobs" color="primary" class="mt-2 ml-3"></v-switch>
-                    </v-list-tile-action>
-                    <v-list-tile-title class="text-xs-right">Enable jobs</v-list-tile-title>
-                  </v-list-tile>
+                    </v-list-item-action>
+                    <v-list-item-group class="text-xs-right">Enable jobs</v-list-item-group>
+                  </v-list-item>
                 </v-list>
 
                 <v-card-actions class="pa-3">
                   <v-spacer></v-spacer>
-                  <v-btn color="grey" flat @click="logout">Logout</v-btn>
+                  <v-btn color="grey" text @click="logout">Logout</v-btn>
                 </v-card-actions>
               </v-card>
             </v-menu>
