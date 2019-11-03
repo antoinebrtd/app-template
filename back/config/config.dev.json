@@ -25,6 +25,9 @@
     "callback": "http://localhost:8000/auth/google/callback",
     "front_callback": "http://localhost:8080/#/auth/callback"
   },
+  "email": {
+    "template@email.com": "email_password"
+  },
   "log": "DEBUG",
   "flask": {
     "env": "development",
