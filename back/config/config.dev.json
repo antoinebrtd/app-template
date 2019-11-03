@@ -22,7 +22,7 @@
   },
   "oauth": {
     "google_config": "./config/google.json",
-    "callback": "http://localhost:5000/auth/callback",
+    "callback": "http://localhost:8000/auth/google/callback",
     "front_callback": "http://localhost:8080/#/auth/callback"
   },
   "log": "DEBUG",

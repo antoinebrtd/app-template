@@ -1,15 +1,16 @@
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
+
+from datetime import datetime
 from flask import Blueprint, jsonify, request, redirect
 from flask_jwt_extended import JWTManager, create_access_token
 
-from template.core import config, db
-from template.core import cache
+from template.core import config, db, cache
 from template.exceptions.users import *
-from template.managers.social import users
+from template.models.social import User
 
 SCOPES = ['https://www.googleapis.com/auth/userinfo.profile',
-          'https://www.googleapis.com/auth/userinfo.email']
+          'https://www.googleapis.com/auth/userinfo.email', 'openid']
 
 
 def create_auth(app):
@@ -59,17 +60,15 @@ def create_auth(app):
 
         user_info_service = googleapiclient.discovery.build("oauth2", "v2", credentials=credentials,
                                                             cache_discovery=False)
+
         user_info = user_info_service.userinfo().get().execute()
         email = user_info.get('email')
-        try:
-            user = users.get_by_mail(email)
-        except UserNotExisting:
-            return jsonify({'email': email, 'msg': 'not_registered'}), 202
-
-        user.first_name = user_info.get('given_name')
-        user.last_name = user_info.get('family_name')
-        user.picture = user_info.get('picture')
-        user.save()
+        user, created = User.get_or_create(email=email, defaults={
+            'first_name': user_info.get('given_name'),
+            'last_name': user_info.get('family_name'),
+            'picture': user_info.get('picture'),
+            'last_login': datetime.now(),
+        })
 
         user.add_credentials(credentials_to_dict(credentials))
 
