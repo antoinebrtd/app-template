@@ -7,6 +7,7 @@ certifi==2019.3.9
 chardet==3.0.4
 Click==7.0
 docutils==0.14
+elasticsearch==7.0.2
 Flask==1.0.2
 Flask-Cors==3.0.7
 Flask-JWT-Extended==3.18.2
@@ -33,6 +34,7 @@ pytz==2019.1
 pytzdata==2019.1
 redis==3.2.1
 requests==2.22.0
+requests-aws4auth==0.9
 requests-oauthlib==1.2.0
 rq==1.0
 rq-dashboard==0.5.1
