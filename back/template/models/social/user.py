@@ -12,6 +12,8 @@ class User(Model):
     email = CharField(unique=True, index=True)
     picture = TextField(null=True)
     last_login = DateTimeField(null=True)
+    email_auth = BooleanField(default=False)
+    google_auth = BooleanField(default=False)
 
     def get_identity(self):
         return {"id": self.id, "first_name": self.first_name, "last_name": self.last_name, "picture": self.picture,

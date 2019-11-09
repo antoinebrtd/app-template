@@ -6,11 +6,11 @@ class UsersError(APIError):
         APIError.__init__(self, 'Users', message, status_code)
 
 
-class UserAlreadyRegistered(UsersError):
+class EmailAddressAlreadyTaken(UsersError):
     def __init__(self):
-        UsersError.__init__(self, 'This user is already registered.')
+        UsersError.__init__(self, 'An account with this email address already exists.')
 
 
-class UserNotExisting(UsersError):
+class UserNotFound(UsersError):
     def __init__(self):
-        UsersError.__init__(self, 'This user does not exist.', 400)
+        UsersError.__init__(self, 'No account associated to this email address.', 400)

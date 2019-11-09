@@ -16,3 +16,4 @@ class APIError(Exception):
 
 
 from .users import *
+from .passwords import *

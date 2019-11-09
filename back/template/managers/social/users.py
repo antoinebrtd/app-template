@@ -26,7 +26,7 @@ def get(user_id) -> User:
         user = User.get(User.id == user_id)
         return user
     except DoesNotExist:
-        raise UserNotExisting
+        raise UserNotFound
 
 
 def get_by_mail(mail) -> User:
@@ -34,7 +34,7 @@ def get_by_mail(mail) -> User:
         user = User.get(User.email == mail)
         return user
     except DoesNotExist:
-        raise UserNotExisting
+        raise UserNotFound
 
 
 def add_user(email, team) -> dict:
@@ -42,7 +42,7 @@ def add_user(email, team) -> dict:
         user = User.create(email=email, team=team)
         return user.get_identity()
     except IntegrityError:
-        raise UserAlreadyRegistered
+        raise EmailAddressAlreadyTaken
 
 
 def delete_user(user_id) -> bool:
@@ -52,4 +52,4 @@ def delete_user(user_id) -> bool:
         cache.set('user_{}_valid'.format(user_id), 'false')
         return True
     except DoesNotExist:
-        raise UserNotExisting
+        raise UserNotFound
