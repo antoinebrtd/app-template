@@ -6,8 +6,8 @@ let user = {
   profile: undefined
 };
 
-function login(context) {
-  axios.get(process.env.VUE_APP_AUTH_URL + '/login')
+function loginWithGoogle(context) {
+  axios.get(process.env.VUE_APP_GOOGLE_AUTH_URL + '/login')
     .then((response) => {
       if (response.status === 200) {
         window.location.replace(response.data.url);
@@ -27,7 +27,7 @@ function login(context) {
 }
 
 function authorize(context, code, state) {
-  axios.get(process.env.VUE_APP_AUTH_URL + '/authorize?code=' + code + '&state=' + state)
+  axios.get(process.env.VUE_APP_GOOGLE_AUTH_URL + '/authorize?code=' + code + '&state=' + state)
     .then(function (response) {
       if (response.status === 200) {
         localStorage.setItem('access_token', response.data.access_token);
@@ -40,7 +40,7 @@ function authorize(context, code, state) {
     })
     .catch(function (error) {
       context.error = true;
-      context.errorMessage = 'An error occured during the authentification.';
+      context.errorMessage = 'An error occurred during the authentication.';
       if (error.response) {
         context.errorMessage = error.response.data.error;
       } else {
@@ -85,7 +85,7 @@ function checkAuth() {
       user.authenticated = false;
       reject();
     }
-    if (!user.authenticated) {
+    if (!user.authenticated && this.router.name !== '/') {
       router.replace('/');
     }
   });
@@ -93,7 +93,7 @@ function checkAuth() {
 
 export default {
   user,
-  login,
+  loginWithGoogle,
   authorize,
   logout,
   checkAuth

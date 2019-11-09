@@ -13,9 +13,9 @@ SCOPES = ['https://www.googleapis.com/auth/userinfo.profile',
           'https://www.googleapis.com/auth/userinfo.email', 'openid']
 
 
-def create_auth(app):
+def create_google_auth(app):
     jwt = JWTManager(app)
-    auth_bp = Blueprint('login', __name__)
+    google_auth_bp = Blueprint('login', __name__)
 
     def credentials_to_dict(credentials):
         return {'token': credentials.token,
@@ -25,19 +25,19 @@ def create_auth(app):
                 'client_secret': credentials.client_secret,
                 'scopes': credentials.scopes}
 
-    @auth_bp.errorhandler(UsersError)
+    @google_auth_bp.errorhandler(UsersError)
     def handle_invalid_usage(error):
         response = jsonify(error.to_dict())
         response.status_code = error.status_code
         return response
 
-    @auth_bp.route('/callback')
+    @google_auth_bp.route('/callback')
     def callback():
         code = request.args.get('code')
         state = request.args.get('state')
         return redirect('{}?code={}&state={}'.format(config['oauth']['front_callback'], code, state))
 
-    @auth_bp.route('/login')
+    @google_auth_bp.route('/login')
     def login():
         flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(config['oauth']['google_config'], scopes=SCOPES)
         flow.redirect_uri = config['oauth']['callback']
@@ -46,7 +46,7 @@ def create_auth(app):
             prompt='consent')
         return jsonify({'url': authorization_url})
 
-    @auth_bp.route('/authorize')
+    @google_auth_bp.route('/authorize')
     @db.connection_context()
     def authorize():
         code = request.args.get('code')
@@ -84,4 +84,4 @@ def create_auth(app):
             return False
         return entry == 'false'
 
-    app.register_blueprint(auth_bp, url_prefix="/auth")
+    app.register_blueprint(google_auth_bp, url_prefix="/google/auth")

@@ -6,7 +6,7 @@
           <v-card flat id="card" color="transparent">
             <v-card-text primary-title>
               <div class="text">
-                <v-btn block v-on:click="login" id="connect">Log in</v-btn>
+                <google-login></google-login>
               </div>
             </v-card-text>
           </v-card>
@@ -18,27 +18,16 @@
 
 <script>
   import auth from "../../modules/auth/index";
+  import GoogleLogin from "./util/GoogleLogin";
 
   export default {
     name: 'Login',
-    data() {
-      return {
-        email: "",
-        password: ""
-      }
-    },
+    components: {GoogleLogin},
     mounted() {
-      let login = this;
-
       auth.checkAuth().then(() => {
-        login.$router.replace('/home');
+        this.$router.replace('/home');
       }).catch(() => {
       });
-    },
-    methods: {
-      login() {
-        auth.login(this);
-      }
     }
   }
 </script>
@@ -58,10 +47,5 @@
     max-width: 90%;
     margin: auto;
     text-align: left;
-  }
-
-  #connect {
-    margin-top: 2em;
-    margin-bottom: 2em;
   }
 </style>

@@ -3,7 +3,7 @@ from flask import Flask
 from flask_cors import CORS
 
 from .api import register_api
-from .auth import create_auth
+from .auth import create_google_auth
 from .config import flask_config
 from .core.cache import REDIS_URL
 from .storage import create_storage_gw
@@ -14,7 +14,7 @@ def create_app(api=True):
     CORS(app, resources={r"*": {"origins": "*"}}, supports_credentials=True)
     app.config.from_object(flask_config)
 
-    create_auth(app)
+    create_google_auth(app)
     create_storage_gw(app)
 
     if api:
