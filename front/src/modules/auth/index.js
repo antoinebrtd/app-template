@@ -6,6 +6,54 @@ let user = {
   profile: undefined
 };
 
+function loginWithEmail(context) {
+  return new Promise((resolve, reject) => {
+    axios.post(process.env.VUE_APP_EMAIL_AUTH_URL + '/login', {email: context.email, password: context.password})
+        .then((response) => {
+          if (response.status === 200) {
+            localStorage.setItem('access_token', response.data.access_token);
+            checkAuth().then(() => {
+              router.push('/home');
+              resolve();
+            });
+          } else {
+            reject();
+          }
+        })
+        .catch(function (error) {
+          if (error.response) {
+            reject(new Error(error.response.data.error));
+          } else {
+            reject()
+          }
+        });
+  })
+}
+
+function signUpWithEmail(context) {
+  return new Promise((resolve, reject) => {
+    axios.post(process.env.VUE_APP_EMAIL_AUTH_URL + '/sign-up', {email: context.email, password: context.password})
+        .then((response) => {
+          if (response.status === 200) {
+            localStorage.setItem('access_token', response.data.access_token);
+            checkAuth().then(() => {
+              router.push('/home');
+              resolve()
+            });
+          } else {
+            reject()
+          }
+        })
+        .catch(function (error) {
+          if (error.response) {
+            reject(new Error(error.response.data.error));
+          } else {
+            reject()
+          }
+        });
+  })
+}
+
 function loginWithGoogle(context) {
   axios.get(process.env.VUE_APP_GOOGLE_AUTH_URL + '/login')
     .then((response) => {
@@ -93,6 +141,8 @@ function checkAuth() {
 
 export default {
   user,
+  loginWithEmail,
+  signUpWithEmail,
   loginWithGoogle,
   authorize,
   logout,

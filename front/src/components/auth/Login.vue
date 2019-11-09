@@ -5,9 +5,24 @@
         <v-flex xs12 sm6>
           <v-card flat id="card" color="transparent">
             <v-card-text primary-title>
-              <div class="text">
+              <v-layout column align-center v-if="!signUpView">
+                <email-login></email-login>
+                <v-btn text class="button mt-2" color="primary" @click="signUpView = !signUpView">
+                  Don't have an account ? Sign up!
+                </v-btn>
+              </v-layout>
+              <v-layout column align-center v-else>
+                <email-sign-up></email-sign-up>
+                <v-btn text class="button mt-2" color="primary" @click="signUpView = !signUpView">
+                  Already have an account ? Log in.
+                </v-btn>
+              </v-layout>
+              <v-card-text class="mt-5">
+                <span>Or</span>
+              </v-card-text>
+              <v-card-text class="mt-5">
                 <google-login></google-login>
-              </div>
+              </v-card-text>
             </v-card-text>
           </v-card>
         </v-flex>
@@ -19,10 +34,17 @@
 <script>
   import auth from "../../modules/auth/index";
   import GoogleLogin from "./util/GoogleLogin";
+  import EmailLogin from "./util/EmailLogin";
+  import EmailSignUp from "./util/EmailSignUp";
 
   export default {
     name: 'Login',
-    components: {GoogleLogin},
+    components: {EmailSignUp, EmailLogin, GoogleLogin},
+    data() {
+      return {
+        signUpView: false
+      }
+    },
     mounted() {
       auth.checkAuth().then(() => {
         this.$router.replace('/home');
@@ -42,10 +64,8 @@
     margin: 4em;
   }
 
-  .text {
-    width: 500px;
-    max-width: 90%;
-    margin: auto;
-    text-align: left;
+  .button {
+    text-transform: None !important;
+    text-decoration: underline;
   }
 </style>

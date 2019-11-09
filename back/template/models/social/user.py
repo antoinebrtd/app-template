@@ -10,6 +10,7 @@ class User(Model):
     first_name = CharField(null=True)
     last_name = CharField(null=True)
     email = CharField(unique=True, index=True)
+    password = CharField(null=True)
     picture = TextField(null=True)
     last_login = DateTimeField(null=True)
     email_auth = BooleanField(default=False)
@@ -25,7 +26,7 @@ class User(Model):
             identity['name'] = "{} {}".format(self.first_name, self.last_name)
         return identity
 
-    def add_credentials(self, credentials):
+    def add_google_credentials(self, credentials):
         from template.models.social.gcredentials import GCredentials
         data = credentials.copy()
         data['user'] = self.id
@@ -38,7 +39,7 @@ class User(Model):
                 GCredentials.delete().where(GCredentials.user == self.id).execute()
                 GCredentials.create(**data)
 
-    def get_credentials(self):
+    def get_google_credentials(self):
         from template.models.social.gcredentials import GCredentials
         gcredentials = list(GCredentials.select().where(GCredentials.user == self.id).dicts())
         data = gcredentials[0].copy()

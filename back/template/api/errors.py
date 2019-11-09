@@ -17,3 +17,10 @@ def register_errors(api):
         response = jsonify({"msg": "{} not found".format(resource)})
         response.status_code = 404
         return response
+
+    @api.errorhandler(DoesNotExist)
+    def handle_invalid_usage(error):
+        resource = error.args[0].split('>')[0].split(' ')[1]
+        response = jsonify({"msg": "{} not found".format(resource)})
+        response.status_code = 404
+        return response

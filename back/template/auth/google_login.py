@@ -25,7 +25,7 @@ def create_google_auth(app):
                 'client_secret': credentials.client_secret,
                 'scopes': credentials.scopes}
 
-    @google_auth_bp.errorhandler(UsersError)
+    @google_auth_bp.errorhandler(UserError)
     def handle_invalid_usage(error):
         response = jsonify(error.to_dict())
         response.status_code = error.status_code
@@ -71,7 +71,7 @@ def create_google_auth(app):
             'google_auth': True
         })
 
-        user.add_credentials(credentials_to_dict(credentials))
+        user.add_google_credentials(credentials_to_dict(credentials))
 
         access_token = create_access_token(identity=user.get_identity())
 

@@ -22,7 +22,13 @@ def create_email_auth(app):
             return False
         return entry == 'false'
 
-    @email_auth_bp.errorhandler(UsersError)
+    @email_auth_bp.errorhandler(UserError)
+    def handle_invalid_usage(error):
+        response = jsonify(error.to_dict())
+        response.status_code = error.status_code
+        return response
+
+    @email_auth_bp.errorhandler(PasswordError)
     def handle_invalid_usage(error):
         response = jsonify(error.to_dict())
         response.status_code = error.status_code
@@ -77,4 +83,4 @@ def create_email_auth(app):
 
             return jsonify(access_token=access_token), 200
 
-    app.register_blueprint(email_auth_bp, url_prefix="/auth/email")
+    app.register_blueprint(email_auth_bp, url_prefix="/email/auth")
