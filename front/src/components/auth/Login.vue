@@ -32,7 +32,7 @@
 </template>
 
 <script>
-  import auth from "../../modules/auth/index";
+  import auth from "@/modules/auth";
   import GoogleLogin from "./util/GoogleLogin";
   import EmailLogin from "./util/EmailLogin";
   import EmailSignUp from "./util/EmailSignUp";

@@ -14,7 +14,7 @@
 
 
 <script>
-  import auth from "../modules/auth/index";
+  import auth from "@/modules/auth";
 
   export default {
     name: 'Main',

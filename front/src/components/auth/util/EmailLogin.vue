@@ -42,7 +42,7 @@
 </template>
 
 <script>
-    import auth from '../../../modules/auth';
+    import auth from '@/modules/auth';
 
     export default {
         name: "EmailLogin",
