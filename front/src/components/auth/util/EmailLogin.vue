@@ -46,6 +46,9 @@
 
     export default {
         name: "EmailLogin",
+        props: {
+            token: String
+        },
         data() {
             return {
                 errorType: undefined,

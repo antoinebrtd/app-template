@@ -1,4 +1,5 @@
 {
+  "front_root_url": "http://localhost:8080/#",
   "database": {
     "host": "localhost",
     "user": "template",
@@ -26,7 +27,7 @@
     "front_callback": "http://localhost:8080/#/auth/callback"
   },
   "email": {
-    "template@email.com": "email_password"
+    "template-noreply@email.com": "email_password"
   },
   "log": "DEBUG",
   "flask": {

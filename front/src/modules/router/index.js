@@ -12,11 +12,16 @@ export default new Router({
 
     {
       path: '*',
-      redirect: '/'
+      redirect: '/login'
     },
     {
-      path: "/",
+      path: "/login",
       name: "login",
+      component: Login
+    },
+    {
+      path: "/login/:token",
+      name: "activate-account",
       component: Login
     },
     {

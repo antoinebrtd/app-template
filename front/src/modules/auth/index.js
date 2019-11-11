@@ -1,5 +1,7 @@
 import axios from 'axios'
-import router from '../router/index'
+import router from '@/modules/router'
+import notifications from '@/modules/notifications'
+
 
 let user = {
   authenticated: false,
@@ -13,6 +15,15 @@ function loginWithEmail(context) {
           if (response.status === 200) {
             localStorage.setItem('access_token', response.data.access_token);
             checkAuth().then(() => {
+              if (context.token) {
+                axios.post(process.env.VUE_APP_EMAIL_AUTH_URL + `/confirm-email/${context.token}`).then(response => {
+                  notifications.addNotification(response.data);
+                  checkAuth().then(() => {
+                  })
+                }).catch(error => {
+                  notifications.addNotification(error.response.data.error)
+                })
+              }
               router.push('/home');
               resolve();
             });

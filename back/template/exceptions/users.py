@@ -19,3 +19,8 @@ class UserNotFound(UserError):
 class LoginWithGoogle(UserError):
     def __init__(self):
         UserError.__init__(self, "Please log in with google", 401)
+
+
+class InvalidConfirmationLink(UserError):
+    def __init__(self):
+        UserError.__init__(self, "Activation link invalid or expired", 404)

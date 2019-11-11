@@ -15,6 +15,7 @@ class User(Model):
     last_login = DateTimeField(null=True)
     email_auth = BooleanField(default=False)
     google_auth = BooleanField(default=False)
+    user_confirmed = BooleanField(default=False)
 
     def get_identity(self):
         return {"id": self.id, "first_name": self.first_name, "last_name": self.last_name, "picture": self.picture,
@@ -24,6 +25,7 @@ class User(Model):
         identity = self.get_identity()
         if self.first_name is not None:
             identity['name'] = "{} {}".format(self.first_name, self.last_name)
+        identity['user_confirmed'] = self.user_confirmed
         return identity
 
     def add_google_credentials(self, credentials):

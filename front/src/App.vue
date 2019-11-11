@@ -2,6 +2,14 @@
   <div id="app">
     <v-app>
       <advanced-header v-if="!forbiddenPath() && loaded"></advanced-header>
+      <v-snackbar :value="true" v-for="notif in notificationsStore.notifications" :key="notif.id" :id="notif.id"
+                  :timeout="0" :style="notif.style" color="primary">
+        <v-icon v-if="notif.error" color="error" class="mr-3">warning</v-icon>
+        {{ notif.text }}
+        <v-btn color="primary" text icon @click="dismissNotification(notif)">
+          <v-icon color="white">clear</v-icon>
+        </v-btn>
+      </v-snackbar>
       <v-content v-if="loaded">
         <transition name="fade" mode="out-in">
           <router-view :key="$route.fullPath"></router-view>
@@ -23,9 +31,17 @@
 <script>
   import AdvancedHeader from './components/util/AdvancedHeader';
   import auth from './modules/auth';
+  import notifications from './modules/notifications';
+
 
   export default {
     name: 'App',
+    data() {
+      return {
+        loaded: false,
+        notificationsStore: notifications.store,
+      }
+    },
     watch: {
       $route: function (value, old) {
         if (old.name === null) {
@@ -48,22 +64,20 @@
         }
       }
     },
-    data() {
-      return {
-        loaded: false
-      }
-    },
     components: {
       advancedHeader: AdvancedHeader
     },
     methods: {
       forbiddenPath: function () {
         if (this.$route.name) {
-          return (this.$route.name === 'login' || this.$route.name === 'callback');
+          return (this.$route.name === 'login' || this.$route.name === 'callback' || this.$route.name === 'activate-account');
         } else {
           return false;
         }
       },
+      dismissNotification(notification) {
+        notifications.removeNotification(notification);
+      }
     }
   }
 </script>

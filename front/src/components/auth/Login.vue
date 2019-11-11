@@ -6,7 +6,7 @@
           <v-card flat id="card" color="transparent">
             <v-card-text primary-title>
               <v-layout column align-center v-if="!signUpView">
-                <email-login></email-login>
+                <email-login :token="$route.params.token"></email-login>
                 <v-btn text class="button mt-2" color="primary" @click="signUpView = !signUpView">
                   Don't have an account ? Sign up!
                 </v-btn>
@@ -32,7 +32,9 @@
 </template>
 
 <script>
+  import axios from 'axios';
   import auth from "@/modules/auth";
+  import notifications from '@/modules/notifications';
   import GoogleLogin from "./util/GoogleLogin";
   import EmailLogin from "./util/EmailLogin";
   import EmailSignUp from "./util/EmailSignUp";
@@ -47,8 +49,19 @@
     },
     mounted() {
       auth.checkAuth().then(() => {
+        if (this.$route.params.token) {
+          axios.post(process.env.VUE_APP_EMAIL_AUTH_URL + `/confirm-email/${this.$route.params.token}`).then(response => {
+            notifications.addNotification(response.data);
+            auth.checkAuth().then(() => {})
+          }).catch(error => {
+            notifications.addNotification(error.response.data.error)
+          })
+        }
         this.$router.replace('/home');
       }).catch(() => {
+        if (this.$route.params.token) {
+          notifications.addNotification('Please login to confirm your email address')
+        }
       });
     }
   }

@@ -2,12 +2,14 @@ import hashlib
 from datetime import datetime
 
 from flask import Blueprint, jsonify, request
-from flask_jwt_extended import JWTManager, create_access_token
+from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity
+from itsdangerous import URLSafeTimedSerializer
 from peewee import DoesNotExist
 
-from template.core import config, db, cache
+from template.core import config, db, cache, queue, mail
 from template.exceptions import *
 from template.models.social import User
+from .utils import authenticated
 
 
 def create_email_auth(app):
@@ -79,8 +81,54 @@ def create_email_auth(app):
             user = User.create(email=email, password=hashed_password.hexdigest(), last_login=datetime.now(),
                                email_auth=True)
 
+            confirmation_token = generate_confirmation_token(email)
+            queue.enqueue(send_validation_email, user.email, confirmation_token)
+
             access_token = create_access_token(identity=user.get_identity())
 
             return jsonify(access_token=access_token), 200
 
+    @email_auth_bp.route('/confirm-email/<confirmation_token>', methods=['POST'])
+    @db.connection_context()
+    @authenticated
+    def confirm_email(confirmation_token):
+        email = confirm_token(confirmation_token)
+        original_email = get_jwt_identity()['email']
+        if original_email != email:
+            raise InvalidConfirmationLink
+
+        user = User.get(email=email)
+        if user.user_confirmed:
+            raise InvalidConfirmationLink
+        else:
+            user.user_confirmed = True
+            user.confirmation_date = datetime.now()
+            user.save()
+            return 'Your account has been activated successfully', 200
+
     app.register_blueprint(email_auth_bp, url_prefix="/email/auth")
+
+
+def generate_confirmation_token(email):
+    serializer = URLSafeTimedSerializer(config['email_auth']['confirmation_key'])
+    return serializer.dumps(email, salt=config['email_auth']['confirmation_password'])
+
+
+def send_validation_email(to, confirmation_token):
+    mail.no_reply.connect()
+    mail.no_reply.sendmail(to, 'Confirm your email address', 'confirm_email',
+                           confirmation_url='{}/login/{}'.format(config['front_root_url'], confirmation_token))
+    mail.no_reply.close()
+
+
+def confirm_token(token, expiration=3600):
+    serializer = URLSafeTimedSerializer(config['email_auth']['confirmation_key'])
+    try:
+        email = serializer.loads(
+            token,
+            salt=config['email_auth']['confirmation_password'],
+            max_age=expiration
+        )
+    except:
+        raise InvalidConfirmationLink
+    return email
