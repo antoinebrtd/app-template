@@ -24,3 +24,8 @@ class LoginWithGoogle(UserError):
 class InvalidConfirmationLink(UserError):
     def __init__(self):
         UserError.__init__(self, "Activation link invalid or expired", 404)
+
+
+class AccountAlreadyActivated(UserError):
+    def __init__(self):
+        UserError.__init__(self, "Your account is already activated", 400)

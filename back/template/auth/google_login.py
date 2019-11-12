@@ -76,6 +76,7 @@ def create_google_auth(app):
             user.last_name = user_info.get('family_name')
             user.picture = user_info.get('picture')
             user.last_login = datetime.now()
+            user.user_confirmed = True
             user.save()
 
         user.add_google_credentials(credentials_to_dict(credentials))

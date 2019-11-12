@@ -47,17 +47,19 @@
         signUpView: false
       }
     },
-    mounted() {
+    created() {
       auth.checkAuth().then(() => {
         if (this.$route.params.token) {
           axios.post(process.env.VUE_APP_EMAIL_AUTH_URL + `/confirm-email/${this.$route.params.token}`).then(response => {
             notifications.addNotification(response.data);
-            auth.checkAuth().then(() => {})
+            auth.checkAuth().then(() => {
+              this.$router.replace('/home');
+            })
           }).catch(error => {
-            notifications.addNotification(error.response.data.error)
+            notifications.addNotification(error.response.data.error);
+            this.$router.replace('/home');
           })
         }
-        this.$router.replace('/home');
       }).catch(() => {
         if (this.$route.params.token) {
           notifications.addNotification('Please login to confirm your email address')

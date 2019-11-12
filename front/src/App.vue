@@ -3,12 +3,17 @@
     <v-app>
       <advanced-header v-if="!forbiddenPath() && loaded"></advanced-header>
       <v-snackbar :value="true" v-for="notif in notificationsStore.notifications" :key="notif.id" :id="notif.id"
-                  :timeout="0" :style="notif.style" color="primary">
+                  :timeout="0" :style="notif.style" color="primary" class="mb-2">
         <v-icon v-if="notif.error" color="error" class="mr-3">warning</v-icon>
         {{ notif.text }}
-        <v-btn color="primary" text icon @click="dismissNotification(notif)">
-          <v-icon color="white">clear</v-icon>
-        </v-btn>
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-btn color="primary" text icon @click="dismissNotification(notif)" v-on="on">
+              <v-icon color="white">clear</v-icon>
+            </v-btn>
+          </template>
+          <span>Close</span>
+        </v-tooltip>
       </v-snackbar>
       <v-content v-if="loaded">
         <transition name="fade" mode="out-in">

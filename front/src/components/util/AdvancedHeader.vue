@@ -57,11 +57,25 @@
     </transition>
 
     <jobs v-if="jobs"></jobs>
+    <v-snackbar v-model="activationReminder" :timeout="0" color="primary">
+      Seems like you haven't activated your account yet!
+      <v-btn text @click="resendEmail" style="text-transform: none; text-decoration: underline">Resend email</v-btn>
+       <v-tooltip right>
+          <template v-slot:activator="{ on }">
+            <v-btn color="primary" text icon @click="activationReminder = false" v-on="on">
+              <v-icon color="white">clear</v-icon>
+            </v-btn>
+          </template>
+          <span>Close</span>
+        </v-tooltip>
+    </v-snackbar>
   </div>
 </template>
 
 <script>
+  import axios from 'axios';
   import auth from "@/modules/auth";
+  import notifications from "@/modules/notifications";
 
   import Jobs from './Jobs';
 
@@ -72,12 +86,26 @@
       return {
         jobs: false,
         menu: false,
-        user: auth.user
+        user: auth.user,
+        activationReminder: false
+      }
+    },
+    mounted() {
+      if (!this.user.profile.user_confirmed) {
+        this.activationReminder = true
       }
     },
     methods: {
       logout() {
         auth.logout();
+      },
+      resendEmail() {
+        this.activationReminder = false;
+        axios.post(process.env.VUE_APP_EMAIL_AUTH_URL + '/resend-email').then( response => {
+          notifications.addNotification(response.data)
+        }).catch(error => {
+          notifications.addNotification(error.response.data.error)
+        })
       }
     }
   }

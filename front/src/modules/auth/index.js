@@ -19,13 +19,18 @@ function loginWithEmail(context) {
                 axios.post(process.env.VUE_APP_EMAIL_AUTH_URL + `/confirm-email/${context.token}`).then(response => {
                   notifications.addNotification(response.data);
                   checkAuth().then(() => {
+                    router.push('/home');
+                    resolve();
                   })
                 }).catch(error => {
-                  notifications.addNotification(error.response.data.error)
+                  notifications.addNotification(error.response.data.error);
+                  router.push('/home');
+                  resolve();
                 })
+              } else {
+                router.push('/home');
+                resolve();
               }
-              router.push('/home');
-              resolve();
             });
           } else {
             reject();
@@ -49,6 +54,7 @@ function signUpWithEmail(context) {
             localStorage.setItem('access_token', response.data.access_token);
             checkAuth().then(() => {
               router.push('/home');
+              notifications.addNotification(`An email to activate your account has been sent to ${user.profile.email}`);
               resolve()
             });
           } else {

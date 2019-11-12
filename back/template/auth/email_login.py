@@ -97,14 +97,29 @@ def create_email_auth(app):
         if original_email != email:
             raise InvalidConfirmationLink
 
-        user = User.get(email=email)
+        user = User.get(email=original_email)
         if user.user_confirmed:
-            raise InvalidConfirmationLink
+            raise AccountAlreadyActivated
         else:
             user.user_confirmed = True
             user.confirmation_date = datetime.now()
             user.save()
-            return 'Your account has been activated successfully', 200
+
+            return 'Your account has been activated successfully!', 200
+
+    @email_auth_bp.route('/resend-email', methods=['POST'])
+    @db.connection_context()
+    @authenticated
+    def resend_email():
+        email = get_jwt_identity()['email']
+        user = User.get(email=email)
+        if user.google_auth or user.user_confirmed:
+            raise AccountAlreadyActivated
+
+        confirmation_token = generate_confirmation_token(email)
+        queue.enqueue(send_validation_email, email, confirmation_token)
+
+        return 'A new email has been sent to {}'.format(email), 200
 
     app.register_blueprint(email_auth_bp, url_prefix="/email/auth")
 
@@ -131,4 +146,5 @@ def confirm_token(token, expiration=3600):
         )
     except:
         raise InvalidConfirmationLink
+
     return email
