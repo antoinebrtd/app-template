@@ -108,3 +108,4 @@ venv.bak/
 config/config.json
 config/config.prod.json
 config/google.json
+certs
