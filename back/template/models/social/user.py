@@ -15,6 +15,7 @@ class User(Model):
     last_login = DateTimeField(null=True)
     email_auth = BooleanField(default=False)
     google_auth = BooleanField(default=False)
+    facebook_auth = BooleanField(default=False)
     user_confirmed = BooleanField(default=False)
 
     def get_identity(self):
@@ -46,6 +47,26 @@ class User(Model):
         gcredentials = list(GCredentials.select().where(GCredentials.user == self.id).dicts())
         data = gcredentials[0].copy()
         data['scopes'] = json.loads(data['scopes'])
+        del data['user']
+        del data['id']
+        return data
+
+    def add_facebook_credentials(self, credentials):
+        from template.models.social.fbcredentials import FBCredentials
+        data = credentials.copy()
+        data['user'] = self.id
+        try:
+            with db.atomic():
+                FBCredentials.create(**data)
+        except IntegrityError:
+            with db.transaction():
+                FBCredentials.delete().where(FBCredentials.user == self.id).execute()
+                FBCredentials.create(**data)
+
+    def get_facebook_credentials(self):
+        from template.models.social.fbcredentials import FBCredentials
+        fbcredentials = list(FBCredentials.select().where(FBCredentials.user == self.id).dicts())
+        data = fbcredentials[0].copy()
         del data['user']
         del data['id']
         return data

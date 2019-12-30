@@ -44,8 +44,10 @@ def create_email_auth(app):
 
         try:
             user = User.get(email=email)
-            if not user.email_auth:
+            if user.google_auth:
                 raise LoginWithGoogle
+            if user.facebook_auth:
+                raise LoginWithFacebook
         except DoesNotExist:
             raise UserNotFound
 
@@ -134,7 +136,7 @@ def create_email_auth(app):
 
         return 'A new email has been sent to {}'.format(email), 200
 
-    app.register_blueprint(email_auth_bp, url_prefix="/email/auth")
+    app.register_blueprint(email_auth_bp, url_prefix="/auth/email")
 
 
 def generate_activation_token(email):

@@ -15,7 +15,7 @@ SCOPES = ['https://www.googleapis.com/auth/userinfo.profile',
 
 def create_google_auth(app):
     jwt = JWTManager(app)
-    google_auth_bp = Blueprint('login', __name__)
+    google_auth_bp = Blueprint('google_login', __name__)
 
     def credentials_to_dict(credentials):
         return {'token': credentials.token,
@@ -93,4 +93,4 @@ def create_google_auth(app):
             return False
         return entry == 'false'
 
-    app.register_blueprint(google_auth_bp, url_prefix="/google/auth")
+    app.register_blueprint(google_auth_bp, url_prefix="/auth/google")
