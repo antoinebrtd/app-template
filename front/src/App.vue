@@ -75,7 +75,7 @@
     methods: {
       forbiddenPath: function () {
         if (this.$route.name) {
-          return (this.$route.name === 'login' || this.$route.name === 'callback' || this.$route.name === 'activate-account');
+          return this.$route.meta.hideHeader;
         } else {
           return false;
         }

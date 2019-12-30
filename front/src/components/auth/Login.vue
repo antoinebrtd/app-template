@@ -22,6 +22,7 @@
               </v-card-text>
               <v-card-text class="mt-5">
                 <google-login></google-login>
+                <facebook-login class="mt-5"></facebook-login>
               </v-card-text>
             </v-card-text>
           </v-card>
@@ -38,10 +39,11 @@
   import GoogleLogin from "./util/GoogleLogin";
   import EmailLogin from "./util/EmailLogin";
   import EmailSignUp from "./util/EmailSignUp";
+  import FacebookLogin from "./util/FacebookLogin";
 
   export default {
     name: 'Login',
-    components: {EmailSignUp, EmailLogin, GoogleLogin},
+    components: {FacebookLogin, EmailSignUp, EmailLogin, GoogleLogin},
     data() {
       return {
         signUpView: false

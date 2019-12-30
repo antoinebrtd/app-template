@@ -156,11 +156,49 @@ function checkAuth() {
   });
 }
 
+function loginWithFacebook(context) {
+  axios.get(process.env.VUE_APP_FACEBOOK_AUTH_URL + '/login')
+      .then((response) => {
+        if (response.status === 200) {
+          window.location.replace(response.data.url);
+        } else {
+          context.error = true;
+        }
+      })
+      .catch(function (error) {
+        context.error = true;
+        context.errorMessage = '';
+        if (error.response) {
+          context.errorMessage = error.response.data.error;
+        } else {
+          console.log(error);
+        }
+      });
+}
+
+function authorizeFacebook(context, code) {
+  axios.get(process.env.VUE_APP_FACEBOOK_AUTH_URL + '/authorize?code=' + code)
+      .then(function (response) {
+        if (response.status === 200) {
+          localStorage.setItem('access_token', response.data.access_token);
+          checkAuth().then(() => {
+            router.push('/home');
+          })
+        }
+      })
+      .catch(function (error) {
+        notifications.addNotification('An error occurred while logging in with Facebook');
+        router.replace('/')
+      });
+}
+
 export default {
   user,
   loginWithEmail,
   signUpWithEmail,
   loginWithGoogle,
+  loginWithFacebook,
+  authorizeFacebook,
   authorize,
   logout,
   checkAuth

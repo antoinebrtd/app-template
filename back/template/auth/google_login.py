@@ -1,7 +1,7 @@
+from datetime import datetime
+
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
-
-from datetime import datetime
 from flask import Blueprint, jsonify, request, redirect
 from flask_jwt_extended import JWTManager, create_access_token
 
@@ -35,12 +35,13 @@ def create_google_auth(app):
     def callback():
         code = request.args.get('code')
         state = request.args.get('state')
-        return redirect('{}?code={}&state={}'.format(config['oauth']['front_callback'], code, state))
+        return redirect('{}?code={}&state={}'.format(config['oauth']['google']['front_callback'], code, state))
 
     @google_auth_bp.route('/login')
     def login():
-        flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(config['oauth']['google_config'], scopes=SCOPES)
-        flow.redirect_uri = config['oauth']['callback']
+        flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(config['oauth']['google']['google_config'],
+                                                                       scopes=SCOPES)
+        flow.redirect_uri = config['oauth']['google']['callback']
         authorization_url, state = flow.authorization_url(
             access_type='offline',
             prompt='consent')
@@ -51,9 +52,10 @@ def create_google_auth(app):
     def authorize():
         code = request.args.get('code')
         state = request.args.get('state')
-        flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(config['oauth']['google_config'], scopes=SCOPES,
+        flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(config['oauth']['google']['google_config'],
+                                                                       scopes=SCOPES,
                                                                        state=state)
-        flow.redirect_uri = config['oauth']['callback']
+        flow.redirect_uri = config['oauth']['google']['callback']
         flow.fetch_token(code=code)
 
         credentials = flow.credentials

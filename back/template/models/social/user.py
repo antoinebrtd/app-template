@@ -55,6 +55,7 @@ class User(Model):
         from template.models.social.fbcredentials import FBCredentials
         data = credentials.copy()
         data['user'] = self.id
+        data['scopes'] = json.dumps(data['scopes'])
         try:
             with db.atomic():
                 FBCredentials.create(**data)
@@ -67,6 +68,7 @@ class User(Model):
         from template.models.social.fbcredentials import FBCredentials
         fbcredentials = list(FBCredentials.select().where(FBCredentials.user == self.id).dicts())
         data = fbcredentials[0].copy()
+        data['scopes'] = json.loads(data['scopes'])
         del data['user']
         del data['id']
         return data

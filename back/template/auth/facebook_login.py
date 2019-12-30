@@ -1,15 +1,20 @@
+import random
+import string
 from datetime import datetime
 
 import requests
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, redirect
 from flask_jwt_extended import JWTManager, create_access_token
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 
-from template.core import cache
+from template.core import cache, config, db, facebook_config
 from template.exceptions.users import *
 from template.models.social import User
 
-FACEBOOK_ME_URL = 'https://graph.facebook.com/me?fields=first_name,last_name,email&access_token={}'
-FACEBOOK_PICTURE_URL = 'https://graph.facebook.com/{}/picture'
+TOKEN_URL = 'https://graph.facebook.com/debug_token?input_token={}&access_token={}'
+ME_URL = 'https://graph.facebook.com/me?fields=first_name,last_name,email&access_token={}'
+PICTURE_URL = 'https://graph.facebook.com/{}/picture'
+SCOPES = 'public_profile,email,birthday'
 
 
 def create_facebook_auth(app):
@@ -17,11 +22,11 @@ def create_facebook_auth(app):
     facebook_auth_bp = Blueprint('facebook_login', __name__)
 
     def credentials_to_dict(credentials):
-        return {'token': credentials['accessToken'],
-                'fb_user_id': credentials['userID'],
-                'expires_in': credentials['expiresIn'],
-                'signed_request': credentials['signedRequest'],
-                'data_access_expiration_time': credentials['data_access_expiration_time']}
+        return {'token': credentials['access_token'],
+                'fb_user_id': credentials['user_id'],
+                'expires_in': credentials['expires_in'],
+                'issued_at': credentials['issued_at'],
+                'scopes': credentials['scopes']}
 
     @facebook_auth_bp.errorhandler(UserError)
     def handle_invalid_usage(error):
@@ -29,24 +34,60 @@ def create_facebook_auth(app):
         response.status_code = error.status_code
         return response
 
-    @facebook_auth_bp.route('/login', methods=['POST'])
+    @facebook_auth_bp.route('/callback')
+    def callback():
+        code = request.args.get('code')
+        state = request.args.get('state')
+        if code is None:
+            return redirect('{}?error=access_denied'.format(config['oauth']['facebook']['front_callback']))
+        if not check_state(state):
+            return redirect('{}?error=invalid_link'.format(config['oauth']['facebook']['front_callback']))
+        return redirect('{}?code={}'.format(config['oauth']['facebook']['front_callback'], code))
+
+    @facebook_auth_bp.route('/login')
     def login():
-        credentials = credentials_to_dict(request.json)
-        response = requests.get(FACEBOOK_ME_URL.format(credentials['token']))
-        if response.status_code != 200:
-            raise FacebookLoginError
-        user_info = response.json()
+        state = generate_state()
+        authorization_url = '{}?client_id={}&redirect_uri={}&state={}'.format(
+            facebook_config['auth_uri'],
+            facebook_config['app_id'],
+            config['oauth']['facebook']['callback'],
+            state
+        )
+        return jsonify({'url': authorization_url})
+
+    @facebook_auth_bp.route('/authorize')
+    @db.connection_context()
+    def authorize():
+        code = request.args.get('code')
+        params = {'client_id': facebook_config['app_id'], 'redirect_uri': config['oauth']['facebook']['callback'],
+                  'client_secret': facebook_config['client_secret'], 'code': code}
+        credentials = requests.get(facebook_config['token_uri'], params=params).json()
+        token_inspection = requests.get(
+            TOKEN_URL.format(credentials['access_token'], facebook_config['app_token'])).json()
+
+        credentials.update(token_inspection['data'])
+
+        profile = requests.get(ME_URL.format(credentials['access_token']))
+
+        user_info = profile.json()
         email = user_info.get('email')
         user, created = User.get_or_create(email=email, defaults={
             'first_name': user_info.get('first_name'),
             'last_name': user_info.get('last_name'),
-            'picture': FACEBOOK_PICTURE_URL.format(credentials['fb_user_id']),
+            'picture': PICTURE_URL.format(credentials['user_id']),
             'last_login': datetime.now(),
             'facebook_auth': True,
             'user_confirmed': True
         })
+        if not created:
+            user.first_name = user_info.get('first_name')
+            user.last_name = user_info.get('last_name')
+            user.picture = PICTURE_URL.format(credentials['user_id'])
+            user.last_login = datetime.now()
+            user.user_confirmed = True
+            user.save()
 
-        user.add_facebook_credentials(credentials)
+        user.add_facebook_credentials(credentials_to_dict(credentials))
 
         access_token = create_access_token(identity=user.get_identity())
 
@@ -61,3 +102,23 @@ def create_facebook_auth(app):
         return entry == 'false'
 
     app.register_blueprint(facebook_auth_bp, url_prefix="/auth/facebook")
+
+
+def generate_state():
+    letters = string.ascii_lowercase
+    random_string = ''.join(random.choice(letters) for i in range(30))
+    serializer = URLSafeTimedSerializer(config['oauth']['facebook']['state_key'])
+    return serializer.dumps(random_string)
+
+
+def check_state(state, expiration=300):
+    if state is None:
+        return False
+
+    serializer = URLSafeTimedSerializer(config['oauth']['facebook']['state_key'])
+    try:
+        serializer.loads(state, max_age=expiration)
+    except SignatureExpired:
+        return False
+
+    return True

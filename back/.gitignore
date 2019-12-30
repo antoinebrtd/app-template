@@ -108,4 +108,5 @@ venv.bak/
 config/config.json
 config/config.prod.json
 config/google.json
+config/facebook.json
 certs

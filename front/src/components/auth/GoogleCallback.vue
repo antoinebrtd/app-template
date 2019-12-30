@@ -20,7 +20,7 @@
   import auth from "@/modules/auth";
 
   export default {
-    name: 'Callback',
+    name: 'GoogleCallback',
     data() {
       return {
         error: false,

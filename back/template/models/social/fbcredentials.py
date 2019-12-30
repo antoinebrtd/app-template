@@ -10,8 +10,8 @@ class FBCredentials(Model):
     token = CharField()
     fb_user_id = CharField()
     expires_in = IntegerField()
-    signed_request = TextField()
-    data_access_expiration_time = IntegerField()
+    issued_at = IntegerField()
+    scopes = TextField()
 
     class Meta:
         database = db
