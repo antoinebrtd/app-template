@@ -14,7 +14,7 @@
             const code = this.$route.query.code;
             const error = this.$route.query.error;
             if (!error) {
-                auth.authorizeFacebook(this, code);
+                auth.authorizeFacebook(code);
             } else if (error === 'access_denied') {
                 router.replace('/')
             } else {

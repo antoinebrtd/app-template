@@ -30,7 +30,7 @@
     mounted() {
       const code = this.$route.query.code;
       const state = this.$route.query.state;
-      auth.authorize(this, code, state);
+      auth.authorizeGoogle(code, state);
     }
   }
 </script>

@@ -26,7 +26,7 @@ export default new Router({
     {
       path: "/login/:token",
       name: "activate-account",
-       meta: {
+      meta: {
         hideHeader: true,
       },
       component: Login
@@ -34,7 +34,7 @@ export default new Router({
     {
       path: "/auth/google/callback",
       name: "google-callback",
-       meta: {
+      meta: {
         hideHeader: true,
       },
       component: GoogleCallback
@@ -42,7 +42,7 @@ export default new Router({
     {
       path: "/auth/facebook/callback",
       name: "facebook-callback",
-       meta: {
+      meta: {
         hideHeader: true,
       },
       component: FacebookCallback
@@ -50,6 +50,7 @@ export default new Router({
     {
       path: "/home",
       name: "home",
+      meta: {},
       component: Main
     }
   ]

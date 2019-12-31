@@ -16,7 +16,9 @@ class User(Model):
     email_auth = BooleanField(default=False)
     google_auth = BooleanField(default=False)
     facebook_auth = BooleanField(default=False)
-    user_confirmed = BooleanField(default=False)
+    account_activated = BooleanField(default=False)
+    first_login = BooleanField(default=False)
+    created_at = DateTimeField(null=True)
 
     def get_identity(self):
         return {"id": self.id, "first_name": self.first_name, "last_name": self.last_name, "picture": self.picture,
@@ -24,10 +26,14 @@ class User(Model):
 
     def get_data(self):
         identity = self.get_identity()
-        if self.first_name is not None:
-            identity['name'] = "{} {}".format(self.first_name, self.last_name)
-        identity['user_confirmed'] = self.user_confirmed
-        return identity
+        identity['name'] = "{} {}".format(self.first_name, self.last_name)
+        if self.email_auth:
+            auth_type = 'email'
+        elif self.google_auth:
+            auth_type = 'google'
+        else:
+            auth_type = 'facebook'
+        return identity, self.account_activated, auth_type, self.first_login
 
     def add_google_credentials(self, credentials):
         from template.models.social.gcredentials import GCredentials

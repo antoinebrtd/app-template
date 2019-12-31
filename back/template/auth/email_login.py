@@ -58,6 +58,7 @@ def create_email_auth(app):
             raise EmailPasswordMismatch
 
         user.last_login = datetime.now()
+        user.first_login = False
         user.save()
         access_token = create_access_token(identity=user.get_identity())
 
@@ -81,7 +82,7 @@ def create_email_auth(app):
             hashed_password = hashlib.sha3_256('{}-{}'.format(config['email_auth']['hash_key'], password).encode())
 
             user = User.create(email=email, password=hashed_password.hexdigest(), last_login=datetime.now(),
-                               email_auth=True)
+                               email_auth=True, first_login=True, created_at=datetime.now())
 
             confirmation_token = generate_activation_token(email)
             queue.enqueue(send_activation_email, user.email, confirmation_token)
@@ -100,10 +101,10 @@ def create_email_auth(app):
             raise InvalidConfirmationLink
 
         user = User.get(email=original_email)
-        if user.user_confirmed:
+        if user.account_activated:
             raise AccountAlreadyActivated
         else:
-            user.user_confirmed = True
+            user.account_activated = True
             user.confirmation_date = datetime.now()
             user.save()
 
@@ -115,7 +116,7 @@ def create_email_auth(app):
     def resend_email():
         email = get_jwt_identity()['email']
         user = User.get(email=email)
-        if user.google_auth or user.user_confirmed:
+        if user.google_auth or user.account_activated:
             raise AccountAlreadyActivated
 
         confirmation_token = generate_activation_token(email)
@@ -128,7 +129,7 @@ def create_email_auth(app):
     def reset_password():
         email = request.json.get('email')
         user = User.get(email=email)
-        if user.google_auth or user.user_confirmed:
+        if user.google_auth or user.account_activated:
             raise AccountAlreadyActivated
 
         confirmation_token = generate_activation_token(email)

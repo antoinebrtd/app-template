@@ -76,15 +76,18 @@ def create_facebook_auth(app):
             'last_name': user_info.get('last_name'),
             'picture': PICTURE_URL.format(credentials['user_id']),
             'last_login': datetime.now(),
+            'created_at': datetime.now(),
             'facebook_auth': True,
-            'user_confirmed': True
+            'first_login': True,
+            'account_activated': True
         })
         if not created:
             user.first_name = user_info.get('first_name')
             user.last_name = user_info.get('last_name')
             user.picture = PICTURE_URL.format(credentials['user_id'])
             user.last_login = datetime.now()
-            user.user_confirmed = True
+            user.account_activated = True
+            user.first_login = False
             user.save()
 
         user.add_facebook_credentials(credentials_to_dict(credentials))

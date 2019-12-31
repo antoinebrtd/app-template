@@ -15,7 +15,7 @@
         name: "FacebookLogin",
         methods: {
             login() {
-                auth.loginWithFacebook(this)
+                auth.loginWithFacebook()
             }
         }
     }

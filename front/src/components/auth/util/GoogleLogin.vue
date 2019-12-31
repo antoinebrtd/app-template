@@ -15,7 +15,7 @@
         name: "GoogleLogin",
         methods: {
             login() {
-                auth.loginWithGoogle(this);
+                auth.loginWithGoogle();
             }
         }
     }

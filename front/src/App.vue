@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-app>
-      <advanced-header v-if="!forbiddenPath() && loaded"></advanced-header>
+
       <v-snackbar :value="true" v-for="notif in notificationsStore.notifications" :key="notif.id" :id="notif.id"
                   :timeout="0" :style="notif.style" color="primary" class="mb-2">
         <v-icon v-if="notif.error" color="error" class="mr-3">warning</v-icon>
@@ -15,20 +15,22 @@
           <span>Close</span>
         </v-tooltip>
       </v-snackbar>
+
+      <advanced-header v-if="!forbiddenPath && loaded"></advanced-header>
+
       <v-content v-if="loaded">
         <transition name="fade" mode="out-in">
           <router-view :key="$route.fullPath"></router-view>
         </transition>
       </v-content>
-      <v-content v-else>
-        <v-container class="text-xs-center">
-          <v-layout justify-center>
-            <v-flex>
+      <v-content v-else class="pt-0">
+        <v-container class="text-xs-center" style="height: 100%">
+          <v-layout justify-center align-center fill-height>
               <v-progress-circular color="primary" indeterminate></v-progress-circular>
-            </v-flex>
           </v-layout>
         </v-container>
       </v-content>
+
     </v-app>
   </div>
 </template>
@@ -47,14 +49,25 @@
         notificationsStore: notifications.store,
       }
     },
+    computed: {
+      forbiddenPath() {
+        if (this.$route.name) {
+          return this.$route.meta.hideHeader;
+        } else {
+          return false;
+        }
+      }
+    },
     watch: {
-      $route: function (value, old) {
-        if (old.name === null) {
+      $route(value, old) {
+        if (!old.name) {
           this.loaded = false;
-          if (this.forbiddenPath() === false) {
+          if (!this.forbiddenPath) {
             auth.checkAuth().then(() => {
               this.loaded = true;
             }).catch(() => {
+              auth.logout();
+              notifications.addNotification('Session expired');
               this.loaded = true;
             });
           } else {
@@ -73,13 +86,6 @@
       advancedHeader: AdvancedHeader
     },
     methods: {
-      forbiddenPath: function () {
-        if (this.$route.name) {
-          return this.$route.meta.hideHeader;
-        } else {
-          return false;
-        }
-      },
       dismissNotification(notification) {
         notifications.removeNotification(notification);
       }

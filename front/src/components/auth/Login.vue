@@ -33,7 +33,6 @@
 </template>
 
 <script>
-  import axios from 'axios';
   import auth from "@/modules/auth";
   import notifications from '@/modules/notifications';
   import GoogleLogin from "./util/GoogleLogin";
@@ -52,15 +51,13 @@
     created() {
       auth.checkAuth().then(() => {
         if (this.$route.params.token) {
-          axios.post(process.env.VUE_APP_EMAIL_AUTH_URL + `/confirm-email/${this.$route.params.token}`).then(response => {
-            notifications.addNotification(response.data);
-            auth.checkAuth().then(() => {
-              this.$router.replace('/home');
-            })
+          auth.activateAccount(this.$route.params.token).then(() => {
+            this.$router.replace('/home');
           }).catch(error => {
-            notifications.addNotification(error.response.data.error);
             this.$router.replace('/home');
           })
+        } else {
+          this.$router.replace('/home');
         }
       }).catch(() => {
         if (this.$route.params.token) {
