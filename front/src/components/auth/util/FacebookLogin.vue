@@ -1,9 +1,9 @@
 <template>
     <div>
-        <v-btn outlined block class="login" @click="login()">
-            <img src="../../../assets/google.png" alt="google-login-icon" class="google-logo">
+        <v-btn block class="login" @click="login()" color="#3B5998">
+            <img src="../../../assets/facebook.png" alt="facebook-login-icon" class="facebook-logo">
             <v-spacer style="max-width: 8%"></v-spacer>
-            Log in with Google
+            Log in with Facebook
         </v-btn>
     </div>
 </template>
@@ -12,10 +12,10 @@
     import auth from "@/modules/auth";
 
     export default {
-        name: "GoogleLogin",
+        name: "FacebookLogin",
         methods: {
             login() {
-                auth.loginWithGoogle();
+                auth.loginWithFacebook()
             }
         }
     }
@@ -24,9 +24,10 @@
 <style scoped>
     .login {
         text-transform: None !important;
+        color: white
     }
 
-    .google-logo {
-        width: 4%;
-     }
+    .facebook-logo {
+        width: 9%;
+    }
 </style>

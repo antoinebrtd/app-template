@@ -3,7 +3,7 @@ from flask import Flask
 from flask_cors import CORS
 
 from .api import register_api
-from .auth import create_google_auth, create_email_auth
+from .auth import create_google_auth, create_email_auth, create_facebook_auth
 from .config import flask_config
 from .core.cache import REDIS_URL
 from .storage import create_storage_gw
@@ -16,6 +16,7 @@ def create_app(api=True):
 
     create_email_auth(app)
     create_google_auth(app)
+    create_facebook_auth(app)
     create_storage_gw(app)
 
     if api:

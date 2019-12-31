@@ -20,7 +20,7 @@
   import auth from "@/modules/auth";
 
   export default {
-    name: 'Callback',
+    name: 'GoogleCallback',
     data() {
       return {
         error: false,
@@ -30,7 +30,7 @@
     mounted() {
       const code = this.$route.query.code;
       const state = this.$route.query.state;
-      auth.authorize(this, code, state);
+      auth.authorizeGoogle(code, state);
     }
   }
 </script>

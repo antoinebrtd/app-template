@@ -59,4 +59,4 @@ class Email:
         self.smtp.quit()
 
 
-no_reply = Email('template-noreply@email.edu', 'template')
+no_reply = Email('ab2887@cornell.edu', 'template')

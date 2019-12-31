@@ -32,6 +32,8 @@
     mounted() {
       auth.checkAuth().then(() => {
         jobs.getJobs();
+      }).catch(error => {
+        auth.logout()
       });
     },
     beforeDestroy() {

@@ -1,5 +1,5 @@
 {
-  "front_root_url": "http://localhost:8080/#",
+  "front_root_url": "https://localhost:8080/#",
   "database": {
     "host": "localhost",
     "user": "template",
@@ -22,9 +22,17 @@
     "bucket": "template-storage"
   },
   "oauth": {
-    "google_config": "./config/google.json",
-    "callback": "http://localhost:5000/auth/google/callback",
-    "front_callback": "http://localhost:8080/#/auth/callback"
+    "google": {
+      "google_config": "./config/google.json",
+      "callback": "https://localhost:5000/auth/google/callback",
+      "front_callback": "https://localhost:8080/#/auth/google/callback"
+    },
+    "facebook": {
+      "facebook_config": "./config/facebook.json",
+      "callback": "https://localhost:5000/auth/facebook/callback",
+      "front_callback": "https://localhost:8080/#/auth/facebook/callback",
+      "state_key": "some_key"
+    }
   },
   "email": {
     "template-noreply@email.com": "email_password"

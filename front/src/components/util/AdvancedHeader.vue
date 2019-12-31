@@ -91,7 +91,7 @@
       }
     },
     mounted() {
-      if (!this.user.profile.user_confirmed) {
+      if (!this.user.accountActivated && !this.user.firstLogin) {
         this.activationReminder = true
       }
     },

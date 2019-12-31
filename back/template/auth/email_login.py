@@ -44,8 +44,10 @@ def create_email_auth(app):
 
         try:
             user = User.get(email=email)
-            if not user.email_auth:
+            if user.google_auth:
                 raise LoginWithGoogle
+            if user.facebook_auth:
+                raise LoginWithFacebook
         except DoesNotExist:
             raise UserNotFound
 
@@ -56,6 +58,7 @@ def create_email_auth(app):
             raise EmailPasswordMismatch
 
         user.last_login = datetime.now()
+        user.first_login = False
         user.save()
         access_token = create_access_token(identity=user.get_identity())
 
@@ -79,10 +82,10 @@ def create_email_auth(app):
             hashed_password = hashlib.sha3_256('{}-{}'.format(config['email_auth']['hash_key'], password).encode())
 
             user = User.create(email=email, password=hashed_password.hexdigest(), last_login=datetime.now(),
-                               email_auth=True)
+                               email_auth=True, first_login=True, created_at=datetime.now())
 
-            confirmation_token = generate_confirmation_token(email)
-            queue.enqueue(send_validation_email, user.email, confirmation_token)
+            confirmation_token = generate_activation_token(email)
+            queue.enqueue(send_activation_email, user.email, confirmation_token)
 
             access_token = create_access_token(identity=user.get_identity())
 
@@ -92,16 +95,16 @@ def create_email_auth(app):
     @db.connection_context()
     @authenticated
     def confirm_email(confirmation_token):
-        email = confirm_token(confirmation_token)
+        email = check_activation_token(confirmation_token)
         original_email = get_jwt_identity()['email']
         if original_email != email:
             raise InvalidConfirmationLink
 
         user = User.get(email=original_email)
-        if user.user_confirmed:
+        if user.account_activated:
             raise AccountAlreadyActivated
         else:
-            user.user_confirmed = True
+            user.account_activated = True
             user.confirmation_date = datetime.now()
             user.save()
 
@@ -113,30 +116,43 @@ def create_email_auth(app):
     def resend_email():
         email = get_jwt_identity()['email']
         user = User.get(email=email)
-        if user.google_auth or user.user_confirmed:
+        if user.google_auth or user.account_activated:
             raise AccountAlreadyActivated
 
-        confirmation_token = generate_confirmation_token(email)
-        queue.enqueue(send_validation_email, email, confirmation_token)
+        confirmation_token = generate_activation_token(email)
+        queue.enqueue(send_activation_email, email, confirmation_token)
 
         return 'A new email has been sent to {}'.format(email), 200
 
-    app.register_blueprint(email_auth_bp, url_prefix="/email/auth")
+    @email_auth_bp.route('/reset-password', methods=['POST'])
+    @db.connection_context()
+    def reset_password():
+        email = request.json.get('email')
+        user = User.get(email=email)
+        if user.google_auth or user.account_activated:
+            raise AccountAlreadyActivated
+
+        confirmation_token = generate_activation_token(email)
+        queue.enqueue(send_activation_email, email, confirmation_token)
+
+        return 'A new email has been sent to {}'.format(email), 200
+
+    app.register_blueprint(email_auth_bp, url_prefix="/auth/email")
 
 
-def generate_confirmation_token(email):
+def generate_activation_token(email):
     serializer = URLSafeTimedSerializer(config['email_auth']['confirmation_key'])
     return serializer.dumps(email, salt=config['email_auth']['confirmation_password'])
 
 
-def send_validation_email(to, confirmation_token):
+def send_activation_email(to, confirmation_token):
     mail.no_reply.connect()
     mail.no_reply.sendmail(to, 'Confirm your email address', 'confirm_email',
                            confirmation_url='{}/login/{}'.format(config['front_root_url'], confirmation_token))
     mail.no_reply.close()
 
 
-def confirm_token(token, expiration=3600):
+def check_activation_token(token, expiration=3600):
     serializer = URLSafeTimedSerializer(config['email_auth']['confirmation_key'])
     try:
         email = serializer.loads(
