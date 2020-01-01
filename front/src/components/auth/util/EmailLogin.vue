@@ -42,7 +42,9 @@
 </template>
 
 <script>
+    import axios from 'axios';
     import auth from '@/modules/auth';
+    import notifications from '@/modules/notifications';
 
     export default {
         name: "EmailLogin",
@@ -84,6 +86,11 @@
                 }
             }
         },
+        created() {
+            if (this.token) {
+                this.checkToken()
+            }
+        },
         methods: {
             validate() {
                 if (this.$refs.form.validate()) {
@@ -98,6 +105,15 @@
                         this.$refs.form.validate()
                     })
                 }
+            },
+            checkToken() {
+                axios.get(process.env.VUE_APP_EMAIL_AUTH_URL + `/check-token/${this.token}`).then(response => {
+                    this.email = response.data.email;
+                    notifications.addNotification('Please login to confirm your email address')
+                }).catch(error => {
+                    notifications.addNotification(error.response.data.error);
+                    this.$router.replace('/')
+                })
             }
         }
     }

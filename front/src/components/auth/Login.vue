@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <v-container class="text-xs-center" pt-1>
+    <v-container class="text-xs-center" pt-1 v-if="loaded">
       <v-layout row justify-center>
         <v-flex xs12 sm6>
           <v-card flat id="card" color="transparent">
@@ -12,7 +12,7 @@
                 </v-btn>
               </v-layout>
               <v-layout column align-center v-else>
-                <email-sign-up></email-sign-up>
+                <email-sign-up :token="token"></email-sign-up>
                 <v-btn text class="button mt-2" color="primary" @click="signUpView = !signUpView">
                   Already have an account ? Log in.
                 </v-btn>
@@ -34,7 +34,6 @@
 
 <script>
   import auth from "@/modules/auth";
-  import notifications from '@/modules/notifications';
   import GoogleLogin from "./util/GoogleLogin";
   import EmailLogin from "./util/EmailLogin";
   import EmailSignUp from "./util/EmailSignUp";
@@ -45,7 +44,10 @@
     components: {FacebookLogin, EmailSignUp, EmailLogin, GoogleLogin},
     data() {
       return {
-        signUpView: false
+        loaded: false,
+        signUpView: false,
+        token: this.$route.params.token,
+        error: false
       }
     },
     created() {
@@ -60,9 +62,7 @@
           this.$router.replace('/home');
         }
       }).catch(() => {
-        if (this.$route.params.token) {
-          notifications.addNotification('Please login to confirm your email address')
-        }
+        this.loaded = true;
       });
     }
   }

@@ -44,10 +44,6 @@ def create_email_auth(app):
 
         try:
             user = User.get(email=email)
-            if user.google_auth:
-                raise LoginWithGoogle
-            if user.facebook_auth:
-                raise LoginWithFacebook
         except DoesNotExist:
             raise UserNotFound
 
@@ -84,25 +80,43 @@ def create_email_auth(app):
             user = User.create(email=email, password=hashed_password.hexdigest(), last_login=datetime.now(),
                                email_auth=True, first_login=True, created_at=datetime.now())
 
-            confirmation_token = generate_activation_token(email)
-            queue.enqueue(send_activation_email, user.email, confirmation_token)
+            activation_token = generate_activation_token(email)
+            queue.enqueue(send_activation_email, user.email, activation_token)
 
             access_token = create_access_token(identity=user.get_identity())
 
             return jsonify(access_token=access_token), 200
 
-    @email_auth_bp.route('/confirm-email/<confirmation_token>', methods=['POST'])
+    @email_auth_bp.route('/check-token/<activation_token>')
+    @db.connection_context()
+    def check_token(activation_token):
+        email = check_activation_token(activation_token)
+        try:
+            user = User.get(email=email)
+        except DoesNotExist:
+            raise UserNotFound
+
+        if user.account_activated:
+            raise InvalidConfirmationLink
+
+        return jsonify(email=email)
+
+    @email_auth_bp.route('/confirm-email/<activation_token>', methods=['POST'])
     @db.connection_context()
     @authenticated
-    def confirm_email(confirmation_token):
-        email = check_activation_token(confirmation_token)
+    def confirm_email(activation_token):
+        email = check_activation_token(activation_token)
         original_email = get_jwt_identity()['email']
         if original_email != email:
             raise InvalidConfirmationLink
 
-        user = User.get(email=original_email)
+        try:
+            user = User.get(email=email)
+        except DoesNotExist:
+            raise UserNotFound
+
         if user.account_activated:
-            raise AccountAlreadyActivated
+            raise InvalidConfirmationLink
         else:
             user.account_activated = True
             user.confirmation_date = datetime.now()
@@ -115,25 +129,17 @@ def create_email_auth(app):
     @authenticated
     def resend_email():
         email = get_jwt_identity()['email']
-        user = User.get(email=email)
+
+        try:
+            user = User.get(email=email)
+        except DoesNotExist:
+            raise UserNotFound
+
         if user.google_auth or user.account_activated:
             raise AccountAlreadyActivated
 
-        confirmation_token = generate_activation_token(email)
-        queue.enqueue(send_activation_email, email, confirmation_token)
-
-        return 'A new email has been sent to {}'.format(email), 200
-
-    @email_auth_bp.route('/reset-password', methods=['POST'])
-    @db.connection_context()
-    def reset_password():
-        email = request.json.get('email')
-        user = User.get(email=email)
-        if user.google_auth or user.account_activated:
-            raise AccountAlreadyActivated
-
-        confirmation_token = generate_activation_token(email)
-        queue.enqueue(send_activation_email, email, confirmation_token)
+        activation_token = generate_activation_token(email)
+        queue.enqueue(send_activation_email, email, activation_token)
 
         return 'A new email has been sent to {}'.format(email), 200
 
@@ -145,10 +151,10 @@ def generate_activation_token(email):
     return serializer.dumps(email, salt=config['email_auth']['confirmation_password'])
 
 
-def send_activation_email(to, confirmation_token):
+def send_activation_email(to, activation_token):
     mail.no_reply.connect()
     mail.no_reply.sendmail(to, 'Confirm your email address', 'confirm_email',
-                           confirmation_url='{}/login/{}'.format(config['front_root_url'], confirmation_token))
+                           confirmation_url='{}/login/{}'.format(config['front_root_url'], activation_token))
     mail.no_reply.close()
 
 

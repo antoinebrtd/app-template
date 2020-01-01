@@ -1,3 +1,4 @@
+from elasticsearch import NotFoundError
 from flask import jsonify
 from peewee import DoesNotExist
 
@@ -18,9 +19,8 @@ def register_errors(api):
         response.status_code = 404
         return response
 
-    @api.errorhandler(DoesNotExist)
+    @api.errorhandler(NotFoundError)
     def handle_invalid_usage(error):
-        resource = error.args[0].split('>')[0].split(' ')[1]
-        response = jsonify({"msg": "{} not found".format(resource)})
+        response = jsonify({"msg": "{} {} not found".format(error.info['_index'].capitalize(), error.info['_id'])})
         response.status_code = 404
         return response

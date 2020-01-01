@@ -8,12 +8,12 @@ class UserError(APIError):
 
 class EmailAddressAlreadyTaken(UserError):
     def __init__(self):
-        UserError.__init__(self, 'An account with this email address already exists.', 400)
+        UserError.__init__(self, 'An account with this email address already exists', 400)
 
 
 class UserNotFound(UserError):
     def __init__(self):
-        UserError.__init__(self, 'No account associated to this email address.', 404)
+        UserError.__init__(self, 'No account associated to this email address', 404)
 
 
 class LoginWithGoogle(UserError):
@@ -28,9 +28,9 @@ class LoginWithFacebook(UserError):
 
 class InvalidConfirmationLink(UserError):
     def __init__(self):
-        UserError.__init__(self, "Activation link invalid or expired", 404)
+        UserError.__init__(self, "This link is invalid or has expired", 404)
 
 
 class AccountAlreadyActivated(UserError):
     def __init__(self):
-        UserError.__init__(self, "Your account is already activated", 400)
+        UserError.__init__(self, "Your account is already activated", 401)
