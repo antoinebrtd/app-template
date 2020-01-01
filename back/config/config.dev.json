@@ -40,7 +40,7 @@
     "activation_password": "some_password"
   },
   "email": {
-    "template-noreply@email.com": "email_password"
+    "your_email@email.com": "your_email_password"
   },
   "log": "DEBUG",
   "flask": {
