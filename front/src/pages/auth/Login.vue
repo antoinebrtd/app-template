@@ -25,9 +25,9 @@
 
 <script>
   import auth from "@/modules/auth";
-  import GoogleLogin from "../components/auth/login/GoogleLogin";
-  import EmailLogin from "../components/auth/login/EmailLogin";
-  import FacebookLogin from "../components/auth/login/FacebookLogin";
+  import GoogleLogin from "../../components/auth/GoogleLogin";
+  import EmailLogin from "../../components/auth/EmailLogin";
+  import FacebookLogin from "../../components/auth/FacebookLogin";
 
   export default {
     name: 'Login',
