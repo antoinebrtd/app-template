@@ -65,6 +65,8 @@ def create_email_auth(app):
     def sign_up():
         email = request.json.get('email')
         password = request.json.get('password')
+        first_name = request.json.get('first_name')
+        last_name = request.json.get('last_name')
 
         try:
             User.get(email=email)
@@ -74,11 +76,17 @@ def create_email_auth(app):
                 raise PasswordRequired
             if len(password) < 8:
                 raise PasswordTooShort
+            if email is None:
+                raise EmailRequired
+            if first_name is None:
+                raise FirstNameRequired
+            if last_name is None:
+                raise LastNameRequired
 
             hashed_password = hashlib.sha3_256('{}-{}'.format(config['email_auth']['hash_key'], password).encode())
 
             user = User.create(email=email, password=hashed_password.hexdigest(), last_login=datetime.now(),
-                               first_login=True, created_at=datetime.now())
+                               first_login=True, created_at=datetime.now(), first_name=first_name, last_name=last_name)
 
             activation_token = generate_activation_token(email)
             queue.enqueue(send_activation_email, user.email, activation_token)

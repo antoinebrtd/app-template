@@ -7,13 +7,14 @@
           </v-btn>
         </v-toolbar-items>
         <v-spacer></v-spacer>
-        <v-toolbar-items class="pr-4" v-if="user.profile">
+        <v-toolbar-items class="pr-4" v-if="$data.$_profile">
           <transition name="slide-x-transition" mode="out-in">
             <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="300" offset-x>
               <template v-slot:activator="{ on }">
                 <v-btn v-on="on" fab icon small>
                   <v-avatar :size="36">
-                    <img :src="user.profile.picture" :alt="user.profile.name">
+                    <img v-if="$data.$_profile.picture" :src="$data.$_profile.picture" :alt="$data.$_profile.name">
+                    <v-icon v-else large>account_circle</v-icon>
                   </v-avatar>
                 </v-btn>
               </template>
@@ -22,12 +23,17 @@
                 <v-list>
                   <v-list-item avatar>
                     <v-list-item-avatar>
-                      <img :src="user.profile.picture" :alt="user.profile.name">
+                      <img v-if="$data.$_profile.picture" :src="$data.$_profile.picture" :alt="$data.$_profile.name">
+                      <v-icon v-else large>account_circle</v-icon>
                     </v-list-item-avatar>
 
                     <v-list-item-group>
-                      <v-list-item-group>{{ user.profile.name }}</v-list-item-group>
+                      <v-list-item-group>{{ $data.$_profile.name }}</v-list-item-group>
                     </v-list-item-group>
+                    <v-spacer></v-spacer>
+                    <v-list-item-icon>
+                      <v-icon v-if="user.accountActivated" class="mt-1" small color="primary">verified_user</v-icon>
+                    </v-list-item-icon>
                   </v-list-item>
                 </v-list>
 

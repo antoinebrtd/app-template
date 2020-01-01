@@ -5,6 +5,30 @@
                 <v-flex xs12>
                     <v-form ref="form" lazy-validation>
                         <v-layout row wrap>
+                            <v-flex xs12 v-if="signUp">
+                                <v-card-text class="py-0 mt-3">
+                                    <v-text-field
+                                            :rules="[rules.emptyFirstName]"
+                                            outline
+                                            label="First name"
+                                            append-icon="person"
+                                            v-model="firstName"
+                                            required
+                                    ></v-text-field>
+                                </v-card-text>
+                            </v-flex>
+                            <v-flex xs12 v-if="signUp">
+                                <v-card-text class="py-0 mt-3">
+                                    <v-text-field
+                                            :rules="[rules.emptyLastName]"
+                                            outline
+                                            label="Last name"
+                                            append-icon="person"
+                                            v-model="lastName"
+                                            required
+                                    ></v-text-field>
+                                </v-card-text>
+                            </v-flex>
                             <v-flex xs12>
                                 <v-card-text class="py-0 mt-3">
                                     <v-text-field
@@ -97,6 +121,8 @@
                 errorMessage: null,
                 showPassword: false,
                 showConfirmPassword: false,
+                firstName: '',
+                lastName: '',
                 email: null,
                 password: '',
                 confirmPassword: '',
@@ -104,6 +130,8 @@
                     emptyEmail: v => !!v || 'Please enter your email',
                     emailNotValid: v => /.+@.+/.test(v) || 'This email is not valid',
                     emptyPassword: v => !!v || 'Please enter your password',
+                    emptyFirstName: v => !!v || 'Please enter your first name',
+                    emptyLastName: v => !!v || 'Please enter your last name',
                     passwordLength: v => v.length >= 8 || 'Min 8 characters',
                     incorrectPassword: () => {
                         if (this.errorType === 'password') return this.errorMessage;

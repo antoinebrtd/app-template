@@ -34,3 +34,18 @@ class InvalidConfirmationLink(UserError):
 class AccountAlreadyActivated(UserError):
     def __init__(self):
         UserError.__init__(self, "Your account is already activated", 401)
+
+
+class EmailRequired(UserError):
+    def __init__(self):
+        UserError.__init__(self, "Email is required", 401)
+
+
+class FirstNameRequired(UserError):
+    def __init__(self):
+        UserError.__init__(self, "First name is required", 401)
+
+
+class LastNameRequired(UserError):
+    def __init__(self):
+        UserError.__init__(self, "Last name is required", 401)

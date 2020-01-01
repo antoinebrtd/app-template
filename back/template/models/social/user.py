@@ -7,15 +7,15 @@ from template.core import db
 
 class User(Model):
     id = PrimaryKeyField()
-    first_name = CharField(null=True)
-    last_name = CharField(null=True)
+    first_name = CharField()
+    last_name = CharField()
     email = CharField(unique=True, index=True)
     password = CharField(null=True)
     picture = TextField(null=True)
-    last_login = DateTimeField(null=True)
+    last_login = DateTimeField()
     account_activated = BooleanField(default=False)
     first_login = BooleanField(default=False)
-    created_at = DateTimeField(null=True)
+    created_at = DateTimeField()
 
     def get_identity(self):
         return {"id": self.id, "first_name": self.first_name, "last_name": self.last_name, "picture": self.picture,
