@@ -1,34 +1,39 @@
 <template>
     <v-layout column align-center>
-        <v-card class="elevation-0" style="background-color: transparent">
-            <v-layout row wrap justify-center>
+        <v-card class="expand-transition" style="background-color: transparent" elevation="0"
+                :height="signUp ? 450 : 230">
+            <v-layout row wrap justify-center fill-height align-center>
                 <v-flex xs12>
                     <v-form ref="form" lazy-validation>
                         <v-layout row wrap>
-                            <v-flex xs12 v-if="signUp">
-                                <v-card-text class="py-0 mt-3">
-                                    <v-text-field
-                                            :rules="[rules.emptyFirstName]"
-                                            outline
-                                            label="First name"
-                                            append-icon="person"
-                                            v-model="firstName"
-                                            required
-                                    ></v-text-field>
-                                </v-card-text>
-                            </v-flex>
-                            <v-flex xs12 v-if="signUp">
-                                <v-card-text class="py-0 mt-3">
-                                    <v-text-field
-                                            :rules="[rules.emptyLastName]"
-                                            outline
-                                            label="Last name"
-                                            append-icon="person"
-                                            v-model="lastName"
-                                            required
-                                    ></v-text-field>
-                                </v-card-text>
-                            </v-flex>
+                            <v-fade-transition hide-on-leave>
+                                <v-flex xs12 v-if="signUp">
+                                    <v-card-text class="py-0 mt-3">
+                                        <v-text-field
+                                                :rules="[rules.emptyFirstName]"
+                                                outline
+                                                label="First name"
+                                                append-icon="person"
+                                                v-model="firstName"
+                                                required
+                                        ></v-text-field>
+                                    </v-card-text>
+                                </v-flex> { enter: number, leave: number },
+                            </v-fade-transition>
+                            <v-fade-transition hide-on-leave>
+                                <v-flex xs12 v-if="signUp">
+                                    <v-card-text class="py-0 mt-3">
+                                        <v-text-field
+                                                :rules="[rules.emptyLastName]"
+                                                outline
+                                                label="Last name"
+                                                append-icon="person"
+                                                v-model="lastName"
+                                                required
+                                        ></v-text-field>
+                                    </v-card-text>
+                                </v-flex>
+                            </v-fade-transition>
                             <v-flex xs12>
                                 <v-card-text class="py-0 mt-3">
                                     <v-text-field
@@ -70,28 +75,31 @@
                                     ></v-text-field>
                                 </v-card-text>
                             </v-flex>
-                            <v-flex xs12 v-if="signUp">
-                                <v-card-text class="py-0">
-                                    <v-text-field
-                                            :disabled="this.password.length < 8"
-                                            v-model="confirmPassword"
-                                            :append-icon="showConfirmPassword ? 'visibility_off' : 'visibility'"
-                                            :rules="[rules.match, rules.nonValidPassword]"
-                                            :type="showConfirmPassword ? 'text' : 'password'"
-                                            name="input-10-1"
-                                            label="Confirm password"
-                                            outline
-                                            @click:append="showConfirmPassword = !showConfirmPassword"
-                                            required
-                                    ></v-text-field>
-                                </v-card-text>
-                            </v-flex>
+                            <v-fade-transition hide-on-leave>
+                                <v-flex xs12 v-if="signUp">
+                                    <v-card-text class="py-0">
+                                        <v-text-field
+                                                :disabled="this.password.length < 8"
+                                                v-model="confirmPassword"
+                                                :append-icon="showConfirmPassword ? 'visibility_off' : 'visibility'"
+                                                :rules="[rules.match, rules.nonValidPassword]"
+                                                :type="showConfirmPassword ? 'text' : 'password'"
+                                                name="input-10-1"
+                                                label="Confirm password"
+                                                outline
+                                                @click:append="showConfirmPassword = !showConfirmPassword"
+                                                required
+                                        ></v-text-field>
+                                    </v-card-text>
+                                </v-flex>
+                            </v-fade-transition>
                         </v-layout>
                     </v-form>
                 </v-flex>
                 <v-flex xs11>
-                    <v-btn v-if="!signUp" color="secondary" block class="login mt-5" @click="validate()">Log in</v-btn>
-                    <v-btn v-else color="secondary" block class="login mt-5" @click="validate()">Sign up</v-btn>
+                    <v-btn v-if="!signUp" color="primary" block class="login-btn mt-5" @click="validate()">Log in
+                    </v-btn>
+                    <v-btn v-else color="primary" block class="login-btn mt-5" @click="validate()">Sign up</v-btn>
                 </v-flex>
             </v-layout>
         </v-card>
@@ -215,7 +223,7 @@
 </script>
 
 <style scoped>
-    .login {
+    .login-btn {
         border-radius: 4px;
         text-transform: none !important;
     }
@@ -223,5 +231,10 @@
     .button {
         text-transform: None !important;
         text-decoration: underline;
+    }
+
+    .expand-transition {
+        -webkit-transition: height 0.2s;
+        transition: height 0.2s;
     }
 </style>

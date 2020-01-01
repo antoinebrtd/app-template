@@ -1,6 +1,11 @@
 <template>
-    <div class="callback">
-    </div>
+  <div class="callback">
+    <v-container class="text-xs-center" style="height: 100%">
+      <v-layout row justify-center fill-height align-center>
+            <v-progress-circular indeterminate></v-progress-circular>
+      </v-layout>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -26,8 +31,8 @@
 </script>
 
 <style scoped>
-    .callback {
-        width: 100%;
-        text-align: center;
-    }
+  .callback {
+    width: 100%;
+    height: 100%
+  }
 </style>

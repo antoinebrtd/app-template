@@ -1,10 +1,10 @@
 import Vue from "vue";
 import Router from "vue-router";
 
-const Login = () => import("../../components/auth/Login");
-const GoogleCallback = () => import("../../components/auth/GoogleCallback");
-const FacebookCallback = () => import("../../components/auth/FacebookCallback");
-const Main = () => import("../../components/Main");
+const Login = () => import("../../pages/Login");
+const GoogleCallback = () => import("../../components/auth/callback/GoogleCallback");
+const FacebookCallback = () => import("../../components/auth/callback/FacebookCallback");
+const Main = () => import("../../pages/Home");
 
 Vue.use(Router);
 

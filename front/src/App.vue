@@ -16,7 +16,7 @@
         </v-tooltip>
       </v-snackbar>
 
-      <advanced-header v-if="!forbiddenPath && loaded"></advanced-header>
+      <app-header v-if="!forbiddenPath && loaded"></app-header>
 
       <v-content v-if="loaded">
         <transition name="fade" mode="out-in">
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-  import AdvancedHeader from './components/util/AdvancedHeader';
+  import Header from './components/util/Header';
   import auth from './modules/auth';
   import notifications from './modules/notifications';
 
@@ -83,7 +83,7 @@
       }
     },
     components: {
-      advancedHeader: AdvancedHeader
+      appHeader: Header
     },
     methods: {
       dismissNotification(notification) {
@@ -150,4 +150,8 @@
   table.v-table thead th {
     font-size: 14px !important;
   }
+
+  .v-content {
+    padding-top: 0 !important;
+}
 </style>

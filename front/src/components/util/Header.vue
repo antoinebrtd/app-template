@@ -3,8 +3,9 @@
     <transition name="fade" appear>
       <v-toolbar fixed class="menu-header elevation-1">
         <v-toolbar-items>
-          <v-btn text class="logo" to="/home">
-          </v-btn>
+          <router-link to="/home">
+            <v-img src="../../assets/banner.jpg" alt="banner" class="banner"></v-img>
+          </router-link>
         </v-toolbar-items>
         <v-spacer></v-spacer>
         <v-toolbar-items class="pr-4" v-if="$data.$_profile">
@@ -50,7 +51,7 @@
 
                 <v-card-actions class="pa-3">
                   <v-spacer></v-spacer>
-                  <v-btn color="grey" text @click="logout">Logout</v-btn>
+                  <v-btn color="secondary" text @click="logout">Logout</v-btn>
                 </v-card-actions>
               </v-card>
             </v-menu>
@@ -86,7 +87,7 @@
   import Jobs from './Jobs';
 
   export default {
-    name: 'AdvancedHeader',
+    name: 'Header',
     components: {Jobs},
     data() {
       return {
@@ -118,23 +119,17 @@
 </script>
 
 <style scoped>
-  .logo {
-    width: 221px;
-    text-align: center;
-    display: block;
-    padding: 0;
-  }
-
-  .logo img {
-    width: 221px;
-  }
-
   .menu-header {
     z-index: 15;
   }
 
   .subheader-items div {
     height: 100%;
+  }
+
+  .banner {
+    height: 64px;
+    width: 220px
   }
 </style>
 
@@ -145,10 +140,6 @@
 
   .v-toolbar .v-input__slot {
     background: transparent !important;
-  }
-
-  .v-content {
-    padding-top: 120px !important;
   }
 
   .list-complete-enter, .list-complete-leave-to {

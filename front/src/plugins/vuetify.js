@@ -8,12 +8,11 @@ export default new Vuetify({
     iconfont: 'mdi',
   },
   theme:{
-    primary: "#2196f3",
-    secondary: '#ffc852',
-    error: "#ff7a73",
-    success: '#62bf70',
-    tab: '#2b2b2b',
-    gap: '#252525',
-    grey: '#626262'
+    themes: {
+      light: {
+        primary: "#41B883",
+        secondary: '#ff7a73',
+      }
+    }
   }
 });
