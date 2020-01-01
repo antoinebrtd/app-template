@@ -77,7 +77,6 @@ def create_facebook_auth(app):
             'picture': PICTURE_URL.format(credentials['user_id']),
             'last_login': datetime.now(),
             'created_at': datetime.now(),
-            'facebook_auth': True,
             'first_login': True,
             'account_activated': True
         })

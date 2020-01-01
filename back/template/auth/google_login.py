@@ -72,7 +72,6 @@ def create_google_auth(app):
             'last_login': datetime.now(),
             'created_at': datetime.now(),
             'first_login': True,
-            'google_auth': True,
             'account_activated': True
         })
         if not created:

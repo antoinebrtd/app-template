@@ -78,7 +78,7 @@ def create_email_auth(app):
             hashed_password = hashlib.sha3_256('{}-{}'.format(config['email_auth']['hash_key'], password).encode())
 
             user = User.create(email=email, password=hashed_password.hexdigest(), last_login=datetime.now(),
-                               email_auth=True, first_login=True, created_at=datetime.now())
+                               first_login=True, created_at=datetime.now())
 
             activation_token = generate_activation_token(email)
             queue.enqueue(send_activation_email, user.email, activation_token)
@@ -147,8 +147,8 @@ def create_email_auth(app):
 
 
 def generate_activation_token(email):
-    serializer = URLSafeTimedSerializer(config['email_auth']['confirmation_key'])
-    return serializer.dumps(email, salt=config['email_auth']['confirmation_password'])
+    serializer = URLSafeTimedSerializer(config['email_auth']['activation_key'])
+    return serializer.dumps(email, salt=config['email_auth']['activation_password'])
 
 
 def send_activation_email(to, activation_token):
@@ -159,11 +159,11 @@ def send_activation_email(to, activation_token):
 
 
 def check_activation_token(token, expiration=3600):
-    serializer = URLSafeTimedSerializer(config['email_auth']['confirmation_key'])
+    serializer = URLSafeTimedSerializer(config['email_auth']['activation_key'])
     try:
         email = serializer.loads(
             token,
-            salt=config['email_auth']['confirmation_password'],
+            salt=config['email_auth']['activation_password'],
             max_age=expiration
         )
     except:

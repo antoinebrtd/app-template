@@ -34,6 +34,11 @@
       "state_key": "some_key"
     }
   },
+  "email_auth": {
+    "hash_key": "some_key",
+    "activation_key": "some_other_key",
+    "activation_password": "some_password"
+  },
   "email": {
     "template-noreply@email.com": "email_password"
   },
