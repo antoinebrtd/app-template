@@ -27,6 +27,6 @@
     }
 
     .google-logo {
-        width: 4%;
+        width: 28px;
      }
 </style>

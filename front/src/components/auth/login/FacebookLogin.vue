@@ -28,6 +28,6 @@
     }
 
     .facebook-logo {
-        width: 9%;
+        width: 24px;
     }
 </style>
