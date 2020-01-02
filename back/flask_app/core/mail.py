@@ -59,4 +59,4 @@ class Email:
         self.smtp.quit()
 
 
-no_reply = Email('your_email@email.com', 'flask_app')
+no_reply = Email('my_email@email.com', 'my app')
