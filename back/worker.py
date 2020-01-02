@@ -1,7 +1,7 @@
 from rq.worker import Worker
 
-from template import create_app
-from template.core import db
+from flask_app import create_app
+from flask_app.core import db
 
 
 class AdvancedWorker(Worker):

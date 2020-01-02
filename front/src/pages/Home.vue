@@ -4,7 +4,8 @@
       <v-container class="text-xs-center">
         <v-layout justify-center>
           <v-flex pt-4>
-            <span class="title">{{ username }}</span>
+            <span>Congratulations <span class="font-weight-bold">{{ username }}</span>, you've made it all the way!
+              Now the fun begins, develop your first feature!</span>
           </v-flex>
         </v-layout>
       </v-container>
@@ -20,7 +21,7 @@
     name: 'Main',
     data() {
       return {
-        username: auth.user.profile.name,
+        username: auth.user.profile.first_name,
       }
     },
   }

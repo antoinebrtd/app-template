@@ -2,8 +2,8 @@
   "front_root_url": "https://localhost:8080/#",
   "database": {
     "host": "localhost",
-    "user": "template",
-    "password": "template"
+    "user": "flask_app",
+    "password": "flask_app"
   },
   "aws": {
     "access_key": "AKIAIOSFODNN7EXAMPLE",
@@ -40,7 +40,7 @@
     "activation_password": "some_password"
   },
   "email": {
-    "your_email@email.com": "your_email_password"
+    "my_email@email.com": "my_email_password"
   },
   "log": "DEBUG",
   "flask": {
