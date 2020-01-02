@@ -30,7 +30,12 @@ function authorizeFacebook(code) {
             raiseError()
         }
     }).catch(function (error) {
-        raiseError()
+        if (error.response) {
+            notifications.addNotification(error.response.data.error);
+            router.replace('/')
+        } else {
+            raiseError()
+        }
     });
 }
 

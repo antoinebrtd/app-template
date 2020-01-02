@@ -32,7 +32,12 @@ function authorizeGoogle(code, state) {
             }
         })
         .catch(error => {
-            raiseError()
+            if (error.response) {
+                notifications.addNotification(error.response.data.error)
+                router.replace('/')
+            } else {
+                raiseError()
+            }
         });
 }
 

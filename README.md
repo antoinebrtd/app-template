@@ -226,7 +226,7 @@ Create an external authorization screen (just fill in your app name), then creat
 In the javascript origins field, add `http://localhost:8080` and `https://localhost:8080`. In redirect URIs, add `http://localhost:5000/auth/google/callback`
 and `https://localhost:5000/auth/google/callback`. Save and you're good to go!
 
-Just download the config file directly from the credentials section, rename it `google.json` and move to `back/config`. Your file should look like this:
+Just download the config file directly from the credentials section, rename it `google.json` and move it to `back/config`. Your file should look like this:
 ```
 {
   "web": {

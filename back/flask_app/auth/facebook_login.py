@@ -81,6 +81,8 @@ def create_facebook_auth(app):
             'account_activated': True
         })
         if not created:
+            if not user.account_activated:
+                raise EmailNotConfirmed
             user.first_name = user_info.get('first_name')
             user.last_name = user_info.get('last_name')
             user.picture = PICTURE_URL.format(credentials['user_id'])

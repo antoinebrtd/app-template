@@ -99,7 +99,7 @@
     },
     mounted() {
       if (!this.user.accountActivated && !this.user.firstLogin) {
-        this.activationReminder = true
+        setTimeout(() => this.activationReminder = true, 5000)
       }
     },
     methods: {

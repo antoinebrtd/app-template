@@ -49,3 +49,8 @@ class FirstNameRequired(UserError):
 class LastNameRequired(UserError):
     def __init__(self):
         UserError.__init__(self, "Last name is required", 401)
+
+
+class EmailNotConfirmed(UserError):
+    def __init__(self):
+        UserError.__init__(self, "An account with this email address already exists and hasn't been activated", 401)
