@@ -1,5 +1,5 @@
-from template.core import logger
-from template import create_app
+from flask_app.core import logger
+from flask_app import create_app
 
 app = create_app()
 

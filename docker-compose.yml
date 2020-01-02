@@ -4,8 +4,8 @@ services:
   database:
     image: postgres:10
     environment:
-      - POSTGRES_USER=template
-      - POSTGRES_PASSWORD=template
+      - POSTGRES_USER=flask_app
+      - POSTGRES_PASSWORD=flask_app
     ports:
       - 5432:5432
 

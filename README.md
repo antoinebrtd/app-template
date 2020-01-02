@@ -93,7 +93,7 @@ Like the front end, it contains an authentication module, as well as a global cu
     ├── back
         ├── config                              # Config files
         │    └── config.dev.json                # Development config
-        ├── app                                 # Backend main folder 
+        ├── flask_app                                 # Backend main folder 
         │    ├── api                            # Routes registration
         │    │    ├── errors.py                 # Exceptions handler  
         │    │    └── jobs.py                   # Job retriever
@@ -143,7 +143,7 @@ You will need the following to run the template:
 You can create a new repository from this template [directly on your Github](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template). 
 Then, clone it on your machine by running
 ```
-$ git@github.com:<YOUR_UNSERNAME>/<YOUR_REPO_NAME>.git
+$ git clone git@github.com:<YOUR_UNSERNAME>/<YOUR_REPO_NAME>.git
 ``` 
 
 All you need to do then is to change the document title in `front/src/App.vue`. Replace `Template` lines 79 and 81 with 
@@ -282,7 +282,7 @@ $ source venv/bin/activate && pip install -r requirements.txt
 Launch the api server, the worker and the scheduler:
 ```
 $ python run.py
-$ rq worker -c template.core.cache
+$ rq worker -c flask_app.core.cache
 $ python clock.py
 ```
 

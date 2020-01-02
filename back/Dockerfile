@@ -15,6 +15,6 @@ ENV GOOGLE_CONFIG_FILE /app/config/google.json
 ADD run.py /app/
 ADD worker.py /app/
 
-ADD template /app/template
+ADD flask_app /app/template
 
 CMD ["gunicorn","-w","1","--bind","0.0.0.0:8000","run:app"]
