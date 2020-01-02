@@ -1,6 +1,6 @@
 <template>
   <div class="login" v-if="loaded">
-    <v-img src="../assets/banner.jpg" alt="banner" class="banner"></v-img>
+    <v-img src="../../assets/banner.jpg" alt="banner" class="banner"></v-img>
     <v-container class="text-xs-center" style="width: 100%; height: 100%">
       <v-layout row justify-center align-center fill-height>
         <v-flex xs12 sm6>
