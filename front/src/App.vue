@@ -66,8 +66,6 @@
             auth.checkAuth().then(() => {
               this.loaded = true;
             }).catch(() => {
-              auth.logout();
-              notifications.addNotification('Session expired');
               this.loaded = true;
             });
           } else {
