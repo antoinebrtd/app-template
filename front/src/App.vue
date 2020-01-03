@@ -26,7 +26,7 @@
       <v-content v-else class="pt-0">
         <v-container class="text-xs-center" style="height: 100%">
           <v-layout justify-center align-center fill-height>
-              <v-img src="./assets/banner.jpg" alt="banner" class="banner"></v-img>
+              <v-img src="./assets/grey_background.jpeg" alt="banner" class="banner"></v-img>
               <v-progress-circular color="primary" indeterminate></v-progress-circular>
           </v-layout>
         </v-container>

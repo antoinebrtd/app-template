@@ -1,6 +1,6 @@
 <template>
     <div class="forgot-password">
-        <v-img src="../../assets/banner.jpg" alt="banner" class="banner"></v-img>
+        <v-img src="../../assets/grey_background.jpeg" alt="banner" class="banner"></v-img>
         <v-container class="forgot-password">
             <v-layout row justify-center align-center fill-height>
                 <v-flex xs12 sm6>
@@ -21,7 +21,7 @@
                             </v-card-text>
                             <v-card-text class="mt-5">
                                 <v-layout row>
-                                    <v-btn class="button mx-3" to="/login" color="secondary">Cancel</v-btn>
+                                    <v-btn class="button mx-3" to="/login" color="secondary" text>Cancel</v-btn>
                                     <v-spacer></v-spacer>
                                     <v-btn class="button mx-3" @click="validate()" color="primary">Send</v-btn>
                                 </v-layout>
@@ -80,7 +80,7 @@
     #card {
         margin: 4em;
         border-radius: 8px;
-        background-color: rgba(255, 255, 255, 0.85);
+        background-color: rgba(255, 255, 255, 0.80);
     }
 
     .banner {

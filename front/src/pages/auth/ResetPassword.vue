@@ -1,6 +1,6 @@
 <template>
     <div class="reset-password" v-if="loaded">
-        <v-img src="../../assets/banner.jpg" alt="banner" class="banner"></v-img>
+        <v-img src="../../assets/grey_background.jpeg" alt="banner" class="banner"></v-img>
         <v-container class="reset-password">
             <v-layout row justify-center align-center fill-height>
                 <v-flex xs12 sm6>
@@ -131,7 +131,7 @@
     #card {
         margin: 4em;
         border-radius: 8px;
-        background-color: rgba(255, 255, 255, 0.85);
+        background-color: rgba(255, 255, 255, 0.80);
     }
 
     .banner {

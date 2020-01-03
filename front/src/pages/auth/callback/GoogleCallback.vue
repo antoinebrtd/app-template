@@ -2,7 +2,7 @@
   <div class="callback">
     <v-container class="text-xs-center" style="height: 100%">
       <v-layout row justify-center fill-height align-center>
-        <v-img src="../../../assets/banner.jpg" alt="banner" class="banner"></v-img>
+        <v-img src="../../../assets/grey_background.jpeg" alt="banner" class="banner"></v-img>
         <v-progress-circular indeterminate color="primary"></v-progress-circular>
       </v-layout>
     </v-container>

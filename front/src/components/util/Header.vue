@@ -1,10 +1,10 @@
 <template>
   <div class="header">
     <transition name="fade" appear>
-      <v-toolbar fixed class="menu-header elevation-1">
+      <v-toolbar fixed :class="transparentHeader ? 'menu-header-transparent elevation-0' : 'menu-header elevation-5'">
         <v-toolbar-items>
-          <router-link to="/home">
-            <v-img src="../../assets/banner.jpg" alt="banner" class="banner"></v-img>
+          <router-link to="/home" class="px-3 py-2">
+            <v-img src="../../assets/vue.png" alt="logo" class="logo"></v-img>
           </router-link>
         </v-toolbar-items>
         <v-spacer></v-spacer>
@@ -94,13 +94,25 @@
         jobs: false,
         menu: false,
         user: auth.user,
-        activationReminder: false
+        activationReminder: false,
+        scrolled: false
       }
+    },
+    computed: {
+      transparentHeader() {
+        return this.$route.name === 'home' ? !this.scrolled : false;
+      }
+    },
+    created() {
+      window.addEventListener('scroll', this.handleScroll);
     },
     mounted() {
       if (!this.user.accountActivated && !this.user.firstLogin) {
         setTimeout(() => this.activationReminder = true, 5000)
       }
+    },
+    destroyed() {
+      window.removeEventListener('scroll', this.handleScroll);
     },
     methods: {
       logout() {
@@ -113,6 +125,9 @@
         }).catch(error => {
           notifications.addNotification(error.response.data.error)
         })
+      },
+      handleScroll() {
+        this.scrolled = window.scrollY > 10;
       }
     }
   }
@@ -120,16 +135,27 @@
 
 <style scoped>
   .menu-header {
+    position: fixed;
+    top: 0;
     z-index: 15;
+    width: 100%
+  }
+
+  .menu-header-transparent {
+    position: fixed;
+    top: 0;
+    z-index: 15;
+    background: transparent !important;
+    width: 100%
   }
 
   .subheader-items div {
     height: 100%;
   }
 
-  .banner {
-    height: 64px;
-    width: 220px
+  .logo {
+    height: 50px;
+    width: 60px
   }
 </style>
 

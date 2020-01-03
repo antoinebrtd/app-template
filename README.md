@@ -4,7 +4,7 @@
 A ready-to-use and customizable web app template with VueJs for frontend and Flask for backend, running on https. Whether 
 you are a beginner or an experienced developer, launch your app and start developing your first feature in one hour!
 
-![Banner](front/src/assets/banner.jpg)
+![Banner](front/src/assets/banner_dark.jpg)
 
 
 ## Table of Contents
