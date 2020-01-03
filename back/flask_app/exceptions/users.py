@@ -8,22 +8,12 @@ class UserError(APIError):
 
 class EmailAddressAlreadyTaken(UserError):
     def __init__(self):
-        UserError.__init__(self, 'An account with this email address already exists', 400)
+        UserError.__init__(self, 'An account with this email address already exists', 401)
 
 
 class UserNotFound(UserError):
     def __init__(self):
         UserError.__init__(self, 'No account associated to this email address', 404)
-
-
-class LoginWithGoogle(UserError):
-    def __init__(self):
-        UserError.__init__(self, "Please log in with google", 401)
-
-
-class LoginWithFacebook(UserError):
-    def __init__(self):
-        UserError.__init__(self, "Please log in with Facebook", 401)
 
 
 class InvalidConfirmationLink(UserError):
@@ -33,22 +23,22 @@ class InvalidConfirmationLink(UserError):
 
 class AccountAlreadyActivated(UserError):
     def __init__(self):
-        UserError.__init__(self, "Your account is already activated", 401)
+        UserError.__init__(self, "Your account is already activated", 403)
 
 
 class EmailRequired(UserError):
     def __init__(self):
-        UserError.__init__(self, "Email is required", 401)
+        UserError.__init__(self, "Email is required", 400)
 
 
 class FirstNameRequired(UserError):
     def __init__(self):
-        UserError.__init__(self, "First name is required", 401)
+        UserError.__init__(self, "First name is required", 400)
 
 
 class LastNameRequired(UserError):
     def __init__(self):
-        UserError.__init__(self, "Last name is required", 401)
+        UserError.__init__(self, "Last name is required", 400)
 
 
 class EmailNotConfirmed(UserError):

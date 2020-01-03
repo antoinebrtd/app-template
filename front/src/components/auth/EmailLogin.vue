@@ -189,7 +189,7 @@
                         auth.loginWithEmail(this).then(() => {
                         }).catch(error => {
                             this.errorMessage = error.message;
-                            if (this.errorMessage === 'Email and password don\'t match') {
+                            if (this.errorMessage === 'Wrong password') {
                                 this.errorType = 'password'
                             } else {
                                 this.errorType = 'email'
