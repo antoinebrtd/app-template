@@ -1,5 +1,5 @@
 <template>
-    <div class="reset-password">
+    <div class="reset-password" v-if="loaded">
         <v-img src="../../assets/banner.jpg" alt="banner" class="banner"></v-img>
         <v-container class="reset-password">
             <v-layout row justify-center align-center fill-height>
@@ -58,6 +58,7 @@
         name: "ResetPassword",
         data() {
             return {
+                loaded: false,
                 showPassword: false,
                 showConfirmPassword: false,
                 errorMessage: null,
@@ -111,6 +112,7 @@
             checkToken() {
                 axios.get(process.env.VUE_APP_EMAIL_AUTH_URL + `/check-reset-token/${this.$route.params.token}`).then(response => {
                     this.email = response.data.email;
+                    this.loaded = true;
                 }).catch(error => {
                     notifications.addNotification(error.response.data.error);
                     this.$router.replace('/')

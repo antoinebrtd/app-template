@@ -2,7 +2,8 @@
   <div class="callback">
     <v-container class="text-xs-center" style="height: 100%">
       <v-layout row justify-center fill-height align-center>
-            <v-progress-circular indeterminate></v-progress-circular>
+        <v-img src="../../../assets/banner.jpg" alt="banner" class="banner"></v-img>
+        <v-progress-circular indeterminate color="primary"></v-progress-circular>
       </v-layout>
     </v-container>
   </div>
@@ -25,5 +26,13 @@
   .callback {
     width: 100%;
     height: 100%
+  }
+
+  .banner {
+    width: 100vw;
+    margin: auto;
+    position: fixed;
+    height: 100vh;
+    top: 0
   }
 </style>
