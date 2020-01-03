@@ -8,7 +8,7 @@ class PasswordError(APIError):
 
 class EmailPasswordMismatch(PasswordError):
     def __init__(self):
-        PasswordError.__init__(self, "Wrong password", 401)
+        PasswordError.__init__(self, "Wrong password", 400)
 
 
 class PasswordRequired(PasswordError):
@@ -19,3 +19,8 @@ class PasswordRequired(PasswordError):
 class PasswordTooShort(PasswordError):
     def __init__(self):
         PasswordError.__init__(self, "Min 8 characters", 400)
+
+
+class SamePasswords(PasswordError):
+    def __init__(self):
+        PasswordError.__init__(self, "Old password and new password must be different", 400)

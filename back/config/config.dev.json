@@ -36,8 +36,10 @@
   },
   "email_auth": {
     "hash_key": "some_key",
-    "activation_key": "some_other_key",
-    "activation_password": "some_password"
+    "activation_key": "some_key",
+    "activation_password": "some_password",
+    "reset_key": "some_key",
+    "reset_password": "some_password"
   },
   "email": {
     "my_email@email.com": "my_email_password"

@@ -13,10 +13,10 @@ class EmailAddressAlreadyTaken(UserError):
 
 class UserNotFound(UserError):
     def __init__(self):
-        UserError.__init__(self, 'No account associated to this email address', 404)
+        UserError.__init__(self, 'No account associated with this email address', 404)
 
 
-class InvalidConfirmationLink(UserError):
+class InvalidLink(UserError):
     def __init__(self):
         UserError.__init__(self, "This link is invalid or has expired", 404)
 

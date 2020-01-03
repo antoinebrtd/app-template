@@ -51,7 +51,7 @@
                                     <v-text-field
                                             v-if="!signUp"
                                             v-model="password"
-                                            :rules="[rules.emptyPassword, rules.incorrectPassword]"
+                                            :rules="[rules.emptyPassword, rules.wrongPassword]"
                                             :append-icon="showPassword ? 'visibility_off' : 'visibility'"
                                             :type="showPassword ? 'text' : 'password'"
                                             name="input-10-1"
@@ -64,7 +64,7 @@
                                             v-else
                                             v-model="password"
                                             :append-icon="showPassword ? 'visibility_off' : 'visibility'"
-                                            :rules="[rules.emptyPassword, rules.nonValidPassword, rules.passwordLength]"
+                                            :rules="[rules.emptyPassword, rules.passwordLength]"
                                             :type="showPassword ? 'text' : 'password'"
                                             name="input-10-1"
                                             label="Password"
@@ -75,14 +75,22 @@
                                     ></v-text-field>
                                 </v-card-text>
                             </v-flex>
+                            <v-layout justify-end row>
+                                <v-slide-y-transition hide-on-leave>
+                                    <v-btn text class="button mr-5" color="secondary" x-small v-if="forgotPassword"
+                                           to="/auth/email/forgot-password">
+                                        Forgot password?
+                                    </v-btn>
+                                </v-slide-y-transition>
+                            </v-layout>
                             <v-fade-transition hide-on-leave>
                                 <v-flex xs12 v-if="signUp">
                                     <v-card-text class="py-0">
                                         <v-text-field
-                                                :disabled="this.password.length < 8"
+                                                :disabled="password.length < 8"
                                                 v-model="confirmPassword"
                                                 :append-icon="showConfirmPassword ? 'visibility_off' : 'visibility'"
-                                                :rules="[rules.match, rules.nonValidPassword]"
+                                                :rules="[rules.match]"
                                                 :type="showConfirmPassword ? 'text' : 'password'"
                                                 name="input-10-1"
                                                 label="Confirm password"
@@ -129,6 +137,7 @@
                 errorMessage: null,
                 showPassword: false,
                 showConfirmPassword: false,
+                forgotPassword: false,
                 firstName: '',
                 lastName: '',
                 email: null,
@@ -141,12 +150,8 @@
                     emptyFirstName: v => !!v || 'Please enter your first name',
                     emptyLastName: v => !!v || 'Please enter your last name',
                     passwordLength: v => v.length >= 8 || 'Min 8 characters',
-                    incorrectPassword: () => {
-                        if (this.errorType === 'password') return this.errorMessage;
-                        else return false
-                    },
                     match: v => v === this.password || "Passwords don't match",
-                    nonValidPassword: () => {
+                    wrongPassword: () => {
                         if (this.errorType === 'password') return this.errorMessage;
                         else return false
                     },
@@ -190,6 +195,7 @@
                         }).catch(error => {
                             this.errorMessage = error.message;
                             if (this.errorMessage === 'Wrong password') {
+                                this.forgotPassword = true;
                                 this.errorType = 'password'
                             } else {
                                 this.errorType = 'email'
@@ -200,7 +206,7 @@
                 }
             },
             checkToken() {
-                axios.get(process.env.VUE_APP_EMAIL_AUTH_URL + `/check-token/${this.token}`).then(response => {
+                axios.get(process.env.VUE_APP_EMAIL_AUTH_URL + `/check-activation-token/${this.token}`).then(response => {
                     this.email = response.data.email;
                     notifications.addNotification('Please login to confirm your email address')
                 }).catch(error => {
@@ -215,6 +221,7 @@
                 this.errorType = null;
                 this.showPassword = false;
                 this.showConfirmPassword = false;
+                this.forgotPassword = false;
                 this.signUp = !this.signUp;
                 this.$refs.form.resetValidation();
             }

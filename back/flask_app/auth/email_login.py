@@ -83,9 +83,9 @@ def create_email_auth(app):
             if last_name is None:
                 raise LastNameRequired
 
-            hashed_password = hashlib.sha3_256('{}-{}'.format(config['email_auth']['hash_key'], password).encode())
+            password = hashlib.sha3_256('{}-{}'.format(config['email_auth']['hash_key'], password).encode())
 
-            user = User.create(email=email, password=hashed_password.hexdigest(), last_login=datetime.now(),
+            user = User.create(email=email, password=password.hexdigest(), last_login=datetime.now(),
                                first_login=True, created_at=datetime.now(), first_name=first_name, last_name=last_name)
 
             activation_token = generate_activation_token(email)
@@ -95,9 +95,9 @@ def create_email_auth(app):
 
             return jsonify(access_token=access_token), 200
 
-    @email_auth_bp.route('/check-token/<activation_token>')
+    @email_auth_bp.route('/check-activation-token/<activation_token>')
     @db.connection_context()
-    def check_token(activation_token):
+    def get_email_from_activation_token(activation_token):
         email = check_activation_token(activation_token)
         try:
             user = User.get(email=email)
@@ -105,7 +105,7 @@ def create_email_auth(app):
             raise UserNotFound
 
         if user.account_activated:
-            raise InvalidConfirmationLink
+            raise InvalidLink
 
         return jsonify(email=email)
 
@@ -116,7 +116,7 @@ def create_email_auth(app):
         email = check_activation_token(activation_token)
         original_email = get_jwt_identity()['email']
         if original_email != email:
-            raise InvalidConfirmationLink
+            raise InvalidLink
 
         try:
             user = User.get(email=email)
@@ -124,10 +124,9 @@ def create_email_auth(app):
             raise UserNotFound
 
         if user.account_activated:
-            raise InvalidConfirmationLink
+            raise InvalidLink
         else:
             user.account_activated = True
-            user.confirmation_date = datetime.now()
             user.save()
 
             return 'Your account has been activated successfully!', 200
@@ -151,6 +150,55 @@ def create_email_auth(app):
 
         return 'A new email has been sent to {}'.format(email), 200
 
+    @email_auth_bp.route('/forgot-password', methods=['POST'])
+    @db.connection_context()
+    def send_reset_link():
+        email = request.json.get('email')
+
+        if email is None:
+            raise EmailRequired
+
+        reset_token = generate_reset_token(email)
+        queue.enqueue(send_reset_email, email, reset_token)
+
+        return 'Instructions to reset your password have been sent to {}'.format(email), 200
+
+    @email_auth_bp.route('/check-reset-token/<reset_token>')
+    @db.connection_context()
+    def get_email_from_reset_token(reset_token):
+        email = check_reset_token(reset_token)
+        try:
+            user = User.get(email=email)
+        except DoesNotExist:
+            raise UserNotFound
+
+        return jsonify(email=user.email)
+
+    @email_auth_bp.route('/reset-password/<reset_token>', methods=['POST'])
+    @db.connection_context()
+    def reset_password(reset_token):
+        email = check_reset_token(reset_token)
+        password = request.json.get('password')
+
+        if password is None:
+            raise PasswordRequired
+        if len(password) < 8:
+            raise PasswordTooShort
+
+        try:
+            user = User.get(email=email)
+        except DoesNotExist:
+            raise UserNotFound
+
+        password = hashlib.sha3_256('{}-{}'.format(config['email_auth']['hash_key'], password).encode())
+        if user.password == password.hexdigest():
+            raise SamePasswords
+        else:
+            user.password = password.hexdigest()
+            user.save()
+
+            return 'Your password has been reset successfully, log in with your new password', 200
+
     app.register_blueprint(email_auth_bp, url_prefix="/auth/email")
 
 
@@ -159,10 +207,10 @@ def generate_activation_token(email):
     return serializer.dumps(email, salt=config['email_auth']['activation_password'])
 
 
-def send_activation_email(to, activation_token):
+def send_activation_email(to, token):
     mail.no_reply.connect()
     mail.no_reply.sendmail(to, 'Confirm your email address', 'confirm_email',
-                           confirmation_url='{}/login/{}'.format(config['front_root_url'], activation_token))
+                           confirmation_url='{}/login/{}'.format(config['front_root_url'], token))
     mail.no_reply.close()
 
 
@@ -175,6 +223,32 @@ def check_activation_token(token, expiration=3600):
             max_age=expiration
         )
     except:
-        raise InvalidConfirmationLink
+        raise InvalidLink
+
+    return email
+
+
+def generate_reset_token(email):
+    serializer = URLSafeTimedSerializer(config['email_auth']['reset_key'])
+    return serializer.dumps(email, salt=config['email_auth']['reset_password'])
+
+
+def send_reset_email(to, token):
+    mail.no_reply.connect()
+    mail.no_reply.sendmail(to, 'Instructions to reset your password', 'reset_password',
+                           reset_url='{}/auth/email/reset-password/{}'.format(config['front_root_url'], token))
+    mail.no_reply.close()
+
+
+def check_reset_token(token, expiration=300):
+    serializer = URLSafeTimedSerializer(config['email_auth']['reset_key'])
+    try:
+        email = serializer.loads(
+            token,
+            salt=config['email_auth']['reset_password'],
+            max_age=expiration
+        )
+    except:
+        raise InvalidLink
 
     return email
