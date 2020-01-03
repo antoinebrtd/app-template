@@ -32,18 +32,25 @@
         </v-container>
       </v-content>
 
+      <app-footer :white="forbiddenPath"></app-footer>
+
     </v-app>
   </div>
 </template>
 
 <script>
   import Header from './components/util/Header';
+  import Footer from './components/util/Footer';
   import auth from './modules/auth';
   import notifications from './modules/notifications';
 
 
   export default {
     name: 'App',
+    components: {
+      appHeader: Header,
+      appFooter: Footer
+    },
     data() {
       return {
         loaded: false,
@@ -80,9 +87,6 @@
           document.title = 'Template';
         }
       }
-    },
-    components: {
-      appHeader: Header
     },
     methods: {
       dismissNotification(notification) {

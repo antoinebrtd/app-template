@@ -1,7 +1,7 @@
 <template>
     <v-layout column align-center>
         <v-card class="expand-transition" style="background-color: transparent" elevation="0"
-                :height="signUp ? 450 : 230">
+                :height="signUp ? 380 : 230">
             <v-layout row wrap justify-center fill-height align-center>
                 <v-flex xs12>
                     <v-form ref="form" lazy-validation>
@@ -10,6 +10,7 @@
                                 <v-flex xs12 v-if="signUp">
                                     <v-card-text class="py-0 mt-3">
                                         <v-text-field
+                                                class="my-0 py-0"
                                                 :rules="[rules.emptyFirstName]"
                                                 outline
                                                 label="First name"
@@ -24,6 +25,7 @@
                                 <v-flex xs12 v-if="signUp">
                                     <v-card-text class="py-0 mt-3">
                                         <v-text-field
+                                                class="my-0 py-0"
                                                 :rules="[rules.emptyLastName]"
                                                 outline
                                                 label="Last name"
@@ -37,6 +39,7 @@
                             <v-flex xs12>
                                 <v-card-text class="py-0 mt-3">
                                     <v-text-field
+                                            class="mb-0 pb-0"
                                             :rules="[rules.emptyEmail, rules.emailNotValid, rules.emailIssue]"
                                             outline
                                             label="Email"
@@ -62,6 +65,7 @@
                                     ></v-text-field>
                                     <v-text-field
                                             v-else
+                                            class="my-0 py-0"
                                             v-model="password"
                                             :append-icon="showPassword ? 'visibility_off' : 'visibility'"
                                             :rules="[rules.emptyPassword, rules.passwordLength]"
@@ -87,6 +91,7 @@
                                 <v-flex xs12 v-if="signUp">
                                     <v-card-text class="py-0">
                                         <v-text-field
+                                                class="my-0 py-0"
                                                 :disabled="password.length < 8"
                                                 v-model="confirmPassword"
                                                 :append-icon="showConfirmPassword ? 'visibility_off' : 'visibility'"

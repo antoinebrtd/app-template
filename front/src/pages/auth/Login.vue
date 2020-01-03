@@ -9,11 +9,11 @@
                 <v-card-text class="title">Complete built-in auth module!</v-card-text>
                 <v-card-text primary-title>
                   <email-login :token="$route.params.token"></email-login>
-                  <v-card-text class="mt-5">
+                  <v-card-text class="mt-2">
                     <span>Or</span>
                   </v-card-text>
-                  <google-login class="mt-5"></google-login>
-                  <facebook-login class="mt-5"></facebook-login>
+                  <google-login></google-login>
+                  <facebook-login class="mt-3"></facebook-login>
                 </v-card-text>
               </v-card>
           </v-hover>
@@ -64,7 +64,7 @@
   }
 
   #card {
-    margin: 4em;
+    margin: 0 5em 0 5em;
     border-radius: 8px;
     background-color: rgba(255, 255, 255, 0.85);
   }
