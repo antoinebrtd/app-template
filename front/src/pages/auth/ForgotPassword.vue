@@ -80,7 +80,7 @@
     #card {
         margin: 4em;
         border-radius: 8px;
-        background-color: rgba(255, 255, 255, 0.80);
+        background-color: rgba(255, 255, 255, 0.70);
     }
 
     .banner {

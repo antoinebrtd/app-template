@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-btn block class="login" @click="login()" color="#3B5998">
-            <img src="../../assets/facebook.png" alt="facebook-login-icon" class="facebook-logo">
+            <img src="../../assets/logos/facebook.png" alt="facebook-login-icon" class="facebook-logo">
             <v-spacer style="max-width: 8%"></v-spacer>
             Log in with Facebook
         </v-btn>

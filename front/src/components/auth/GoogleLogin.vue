@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-btn outlined block class="login" @click="login()">
-            <img src="../../assets/google.png" alt="google-login-icon" class="google-logo">
+            <img src="../../assets/logos/google.png" alt="google-login-icon" class="google-logo">
             <v-spacer style="max-width: 8%"></v-spacer>
             Log in with Google
         </v-btn>

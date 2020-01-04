@@ -66,7 +66,7 @@
   #card {
     margin: 0 5em 0 5em;
     border-radius: 8px;
-    background-color: rgba(255, 255, 255, 0.80);
+    background-color: rgba(255, 255, 255, 0.70);
   }
 
   .banner {

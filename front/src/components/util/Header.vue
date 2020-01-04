@@ -4,7 +4,7 @@
       <v-toolbar fixed :class="transparentHeader ? 'menu-header-transparent elevation-0' : 'menu-header elevation-5'">
         <v-toolbar-items>
           <router-link to="/home" class="px-3 py-2">
-            <v-img src="../../assets/vue.png" alt="logo" class="logo"></v-img>
+            <v-img src="../../assets/logos/vue.png" alt="logo" class="logo"></v-img>
           </router-link>
         </v-toolbar-items>
         <v-spacer></v-spacer>
@@ -15,7 +15,7 @@
                 <v-btn v-on="on" fab icon small>
                   <v-avatar :size="36">
                     <img v-if="$data.$_profile.picture" :src="$data.$_profile.picture" :alt="$data.$_profile.name">
-                    <v-icon v-else large>account_circle</v-icon>
+                    <v-icon v-else large :color="transparentHeader ? 'white' : ''">account_circle</v-icon>
                   </v-avatar>
                 </v-btn>
               </template>
