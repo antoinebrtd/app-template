@@ -37,7 +37,7 @@
                             </v-card-text>
                             <v-card-text class="mt-5">
                                 <v-layout row>
-                                    <v-btn class="button mx-3" to="/login" color="secondary" text>Cancel</v-btn>
+                                    <v-btn class="button mx-3" to="/login" color="error" text>Cancel</v-btn>
                                     <v-spacer></v-spacer>
                                     <v-btn class="button mx-3" @click="validate()" color="primary">Send</v-btn>
                                 </v-layout>

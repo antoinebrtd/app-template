@@ -81,7 +81,7 @@
                             </v-flex>
                             <v-layout justify-end row>
                                 <v-slide-y-transition hide-on-leave>
-                                    <v-btn text class="button mr-5" color="secondary" x-small v-if="forgotPassword"
+                                    <v-btn text class="button mr-5" color="error" x-small v-if="forgotPassword"
                                            to="/auth/email/forgot-password">
                                         Forgot password?
                                     </v-btn>

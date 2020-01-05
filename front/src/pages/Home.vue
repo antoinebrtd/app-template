@@ -132,10 +132,10 @@
                           <h4 class="subheading white--text font-weight-thin mt-5">{{ stack.text }}</h4>
                           <v-row align="center" justify="center" class="mt-5">
                             <v-slide-x-reverse-transition hide-on-leave>
-                              <span :class="hover ? 'primary--text ease hover-discover' : 'white--text ease'">discover</span>
+                              <span :class="hover ? 'tertiary--text ease hover-discover' : 'white--text ease'">discover</span>
                             </v-slide-x-reverse-transition>
                             <v-slide-x-transition hide-on-leave>
-                              <v-icon color="primary" v-if="hover">arrow_right_alt</v-icon>
+                              <v-icon color="tertiary" v-if="hover">arrow_right_alt</v-icon>
                             </v-slide-x-transition>
                           </v-row>
                         </v-layout>

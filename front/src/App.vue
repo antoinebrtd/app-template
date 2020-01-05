@@ -32,7 +32,7 @@
         </v-container>
       </v-content>
 
-      <app-footer :background="!forbiddenPath"></app-footer>
+      <app-footer :background="!forbiddenPath" v-if="loaded"></app-footer>
 
     </v-app>
   </div>

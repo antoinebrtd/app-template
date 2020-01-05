@@ -6,7 +6,7 @@
         <v-flex xs12 sm6>
           <v-hover v-slot:default="{ hover }">
               <v-card flat id="card" class="pa-5 expand-transition" :elevation="hover ? 12 : 5">
-                <v-card-text class="title">Complete built-in auth module!</v-card-text>
+                <v-card-text class="title">Log in or sign up to explore!</v-card-text>
                 <v-card-text primary-title>
                   <email-login :token="$route.params.token"></email-login>
                   <v-card-text class="mt-2">

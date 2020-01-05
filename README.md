@@ -288,4 +288,4 @@ $ python clock.py
 
 Your app is now running, enjoy!
 
-![Home](screenshots/home.png)
+![Home](screenshots/full_gif.gif)

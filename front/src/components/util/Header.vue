@@ -9,10 +9,31 @@
         </v-toolbar-items>
         <v-spacer></v-spacer>
         <v-toolbar-items class="pr-4" v-if="$data.$_profile">
-          <transition name="slide-x-transition" mode="out-in">
+          <v-scroll-x-reverse-transition v-for="link in links" :key="link.text">
+            <v-btn
+                    v-if="displayMenu"
+                    text
+                    class="px-4 main-menu pt-1"
+                    :to="link.route"
+                    :class="transparentHeader ? 'white--text' : ''"
+            >
+              {{ link.text }}
+            </v-btn>
+          </v-scroll-x-reverse-transition>
+          <v-scroll-x-reverse-transition>
+            <v-btn
+                    v-if="displayMenu"
+                    class="px-4 main-menu pt-1"
+                    :class="transparentHeader ? 'primary--text' : 'tertiary--text'"
+                    to="/Contact"
+                    text>
+              Contact
+            </v-btn>
+          </v-scroll-x-reverse-transition>
+          <v-slide-x-transition>
             <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="300" offset-x>
               <template v-slot:activator="{ on }">
-                <v-btn v-on="on" fab icon small>
+                <v-btn v-on="on" fab icon small class="ml-5">
                   <v-avatar :size="36">
                     <img v-if="$data.$_profile.picture" :src="$data.$_profile.picture" :alt="$data.$_profile.name">
                     <v-icon v-else large :color="transparentHeader ? 'white' : ''">account_circle</v-icon>
@@ -51,11 +72,11 @@
 
                 <v-card-actions class="pa-3">
                   <v-spacer></v-spacer>
-                  <v-btn color="secondary" text @click="logout">Logout</v-btn>
+                  <v-btn color="error" text @click="logout">Logout</v-btn>
                 </v-card-actions>
               </v-card>
             </v-menu>
-          </transition>
+          </v-slide-x-transition>
         </v-toolbar-items>
         <div v-else style="height: 100%;" class="pa-3">
           <v-progress-circular indeterminate></v-progress-circular>
@@ -95,7 +116,13 @@
         menu: false,
         user: auth.user,
         activationReminder: false,
-        scrolled: false
+        scrolled: false,
+        displayMenu: false,
+        links: [
+          {text: 'Api', route: '/api'},
+          {text: 'On PyCharm', route: '/pycharm'},
+          {text: 'About', route: '/about'},
+        ]
       }
     },
     computed: {
@@ -110,6 +137,7 @@
       if (!this.user.accountActivated && !this.user.firstLogin) {
         setTimeout(() => this.activationReminder = true, 5000)
       }
+      setTimeout(() => this.displayMenu = true, 200)
     },
     destroyed() {
       window.removeEventListener('scroll', this.handleScroll);
@@ -156,6 +184,11 @@
   .logo {
     height: 50px;
     width: 60px
+  }
+
+  .main-menu {
+    transition: all 0.5s ease;
+    text-transform: none !important;
   }
 </style>
 
