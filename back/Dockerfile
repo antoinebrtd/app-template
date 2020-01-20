@@ -6,8 +6,12 @@ WORKDIR /app
 ADD requirements.txt .
 RUN pip install -r requirements.txt
 
+ADD config/tree.json /app/config/tree.json
 ADD config/config.prod.json /app/config/config.json
 ADD config/google.json /app/config/google.json
+ADD config/facebook.json /app/config/facebook.json
+
+ENV TREE_FILE /app/config/tree.json
 ENV CONFIG_FILE /app/config/config.json
 ENV FACEBOOK_CONFIG_FILE /app/config/facebook.json
 ENV GOOGLE_CONFIG_FILE /app/config/google.json

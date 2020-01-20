@@ -1,8 +1,8 @@
 <template>
     <v-hover v-slot:default="{ hover }">
         <v-row align="center" justify="center">
-            <v-col align-self="end" cols="3" v-if="!stack.reverse">
-                <v-img :src="stack.logo" alt="vue" class="logo"></v-img>
+            <v-col cols="3" v-if="!stack.reverse">
+                <v-img :src="stack.logo" :alt="stack.name" class="logo"></v-img>
             </v-col>
             <v-col class="text-start" cols="4">
                 <span class="subtitle-1 font-weight-bold">{{ stack.caption }}</span>
@@ -19,8 +19,8 @@
                     </v-row>
                 </a>
             </v-col>
-            <v-col align-self="end" cols="3" v-if="stack.reverse">
-                <v-img :src="stack.logo" alt="vue" class="logo"></v-img>
+            <v-col cols="3" v-if="stack.reverse">
+                <v-img :src="stack.logo" :alt="stack.name" class="logo"></v-img>
             </v-col>
         </v-row>
     </v-hover>

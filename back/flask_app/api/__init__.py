@@ -36,6 +36,7 @@ def register_api(app):
 
     import flask_app.api.jobs
     import flask_app.api.social
+    import flask_app.api.utils
 
     register_errors(api_bp)
 

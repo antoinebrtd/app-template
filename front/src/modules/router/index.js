@@ -7,6 +7,7 @@ const ResetPassword = () => import("../../pages/auth/ResetPassword");
 const GoogleCallback = () => import("../../pages/auth/callback/GoogleCallback");
 const FacebookCallback = () => import("../../pages/auth/callback/FacebookCallback");
 const Main = () => import("../../pages/Home");
+const About = () => import("../../pages/About");
 
 Vue.use(Router);
 
@@ -70,6 +71,12 @@ export default new Router({
       name: "home",
       meta: {},
       component: Main
+    },
+    {
+      path: "/about",
+      name: "about",
+      meta: {},
+      component: About
     }
   ]
 });

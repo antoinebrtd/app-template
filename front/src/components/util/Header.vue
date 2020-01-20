@@ -78,13 +78,13 @@
         links: [
           {text: 'Api', route: '/api'},
           {text: 'On PyCharm', route: '/pycharm'},
-          {text: 'About', route: '/about'},
+          {text: 'About your app', route: '/about'},
         ]
       }
     },
     computed: {
       transparentHeader() {
-        return this.$route.name === 'home' ? !this.scrolled : false;
+        return !this.scrolled;
       }
     },
     created() {
