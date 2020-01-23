@@ -1,4 +1,4 @@
-import {user, checkAuth, logout} from './util'
+import {user, checkAuth, getUserInfo, logout} from './util'
 import {authorizeFacebook, loginWithFacebook} from './facebook'
 import {authorizeGoogle, loginWithGoogle} from './google'
 import {loginWithEmail, signUpWithEmail, activateAccount} from './email'
@@ -16,5 +16,6 @@ export default {
   loginWithFacebook,
   authorizeFacebook,
   checkAuth,
-  logout
+  logout,
+  getUserInfo
 }

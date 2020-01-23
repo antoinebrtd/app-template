@@ -8,6 +8,7 @@ const GoogleCallback = () => import("../../pages/auth/callback/GoogleCallback");
 const FacebookCallback = () => import("../../pages/auth/callback/FacebookCallback");
 const Main = () => import("../../pages/Home");
 const About = () => import("../../pages/About");
+const MyAccount = () => import("../../pages/MyAccount");
 
 Vue.use(Router);
 
@@ -23,6 +24,7 @@ export default new Router({
       name: "login",
       meta: {
         hideHeader: true,
+        transparentFooter: true
       },
       component: Login
     },
@@ -31,6 +33,7 @@ export default new Router({
       name: "forgot-password",
       meta: {
         hideHeader: true,
+        transparentFooter: true
       },
       component: ForgotPassword
     },
@@ -39,6 +42,7 @@ export default new Router({
       name: "reset-password",
       meta: {
         hideHeader: true,
+        transparentFooter: true
       },
       component: ResetPassword
     },
@@ -47,6 +51,7 @@ export default new Router({
       name: "activate-account",
       meta: {
         hideHeader: true,
+        transparentFooter: true
       },
       component: Login
     },
@@ -55,6 +60,7 @@ export default new Router({
       name: "google-callback",
       meta: {
         hideHeader: true,
+        transparentFooter: true
       },
       component: GoogleCallback
     },
@@ -63,6 +69,7 @@ export default new Router({
       name: "facebook-callback",
       meta: {
         hideHeader: true,
+        transparentFooter: true
       },
       component: FacebookCallback
     },
@@ -77,6 +84,14 @@ export default new Router({
       name: "about",
       meta: {},
       component: About
+    },
+    {
+      path: "/accounts/:id",
+      name: "my-account",
+      meta: {
+        transparentFooter: true
+      },
+      component: MyAccount
     }
   ]
 });

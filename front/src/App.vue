@@ -32,7 +32,7 @@
         </v-container>
       </v-content>
 
-      <app-footer :background="!forbiddenPath" v-if="loaded"></app-footer>
+      <app-footer :background="!transparentFooter" v-if="loaded"></app-footer>
 
     </v-app>
   </div>
@@ -61,6 +61,13 @@
       forbiddenPath() {
         if (this.$route.name) {
           return this.$route.meta.hideHeader;
+        } else {
+          return false;
+        }
+      },
+      transparentFooter() {
+        if (this.$route.name) {
+          return this.$route.meta.transparentFooter;
         } else {
           return false;
         }

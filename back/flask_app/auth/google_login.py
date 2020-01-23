@@ -77,11 +77,9 @@ def create_google_auth(app):
         if not created:
             if not user.account_activated:
                 raise EmailNotConfirmed
-            user.first_name = user_info.get('given_name')
-            user.last_name = user_info.get('family_name')
-            user.picture = user_info.get('picture')
+            if not user.picture:
+                user.picture = user_info.get('picture')
             user.last_login = datetime.now()
-            user.account_activated = True
             user.first_login = False
             user.save()
 

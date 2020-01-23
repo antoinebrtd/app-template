@@ -2,7 +2,6 @@ from botocore.exceptions import ClientError
 import flask
 from flask import Blueprint, request
 
-from flask_app.auth import authenticated
 from flask_app.core import storage, config
 
 
@@ -10,7 +9,6 @@ def create_storage_gw(app):
     storage_bp = Blueprint('storage-gw', __name__)
 
     @storage_bp.route('/download')
-    @authenticated
     def download():
         filepath = request.args.get('filepath')
         try:

@@ -18,6 +18,7 @@
                   class="px-4 main-menu pt-1"
                   :to="link.route"
                   :class="transparentHeader ? 'white--text' : ''"
+                  :color="$route.path === link.route ? 'tertiary' : ''"
           >
             {{ link.text }}
           </v-btn>
@@ -25,8 +26,8 @@
         <v-scroll-x-reverse-transition>
           <v-btn
                   v-if="displayMenu"
+                  color="primary"
                   class="px-4 main-menu pt-1"
-                  :class="transparentHeader ? 'primary--text' : 'tertiary--text'"
                   to="/Contact"
                   text>
             Contact
@@ -71,7 +72,7 @@
     data() {
       return {
         user: auth.user,
-        jobs: true,
+        jobs: false,
         activationReminder: false,
         scrolled: false,
         displayMenu: false,
@@ -144,5 +145,9 @@
 <style>
   .v-toolbar__content {
     padding: 0 !important;
+  }
+
+  .v-btn--active::before {
+    opacity: 0 !important;
   }
 </style>

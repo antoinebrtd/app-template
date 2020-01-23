@@ -5,7 +5,6 @@ let user = {
     authenticated: false,
     profile: undefined,
     accountActivated: false,
-    authType: null,
     firstLogin: false
 };
 
@@ -35,7 +34,6 @@ function getUserInfo() {
                 user.profile = response.data.profile;
                 user.accountActivated = response.data.account_activated;
                 user.firstLogin = response.data.first_login;
-                user.authType = response.data.auth_type;
                 localStorage.setItem('profile', JSON.stringify(user.profile));
                 resolve();
             } else {
@@ -58,11 +56,11 @@ function logout() {
     user.authenticated = false;
     user.profile = null;
     user.accountActivated = false;
-    user.authType = null;
 }
 
 export {
     user,
     checkAuth,
-    logout
+    logout,
+    getUserInfo
 }
