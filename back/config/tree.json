@@ -495,6 +495,24 @@
           "name": "components",
           "children": [
             {
+              "id": 129,
+              "name": "account",
+              "children": [
+                {
+                  "id": 130,
+                  "name": "ModifyAccount.vue",
+                  "file": "vue",
+                  "description": "The component to modify your account."
+                },
+                {
+                  "id": 131,
+                  "name": "ViewAccount.vue",
+                  "file": "vue",
+                  "description": "The component to view an other user's account."
+                }
+              ]
+            },
+            {
               "id": 92,
               "name": "auth",
               "children": [
@@ -578,6 +596,12 @@
                   "name": "ProfileMenu.vue",
                   "file": "vue",
                   "description": "A simple profile menu component."
+                },
+                {
+                  "id": 128,
+                  "name": "UploadButton.vue",
+                  "file": "vue",
+                  "description": "A super nice and customizable upload button."
                 }
               ]
             }
@@ -719,6 +743,12 @@
               "name": "Home.vue",
               "file": "vue",
               "description": "The home page."
+            },
+            {
+              "id": 127,
+              "name": "Account.vue",
+              "file": "vue",
+              "description": "Page where you can see and manage your account."
             }
           ]
         },

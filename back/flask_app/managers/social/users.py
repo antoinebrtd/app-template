@@ -1,6 +1,8 @@
-from peewee import DoesNotExist, IntegrityError
+import uuid
 
-from flask_app.core import cache
+from peewee import DoesNotExist
+
+from flask_app.core import cache, storage, config
 from flask_app.exceptions import *
 from flask_app.models.social.user import User
 
@@ -15,7 +17,8 @@ def get_all(search=None) -> list:
             (User.last_name.contains(search)))
 
     for user in query:
-        users.append(user.get_data())
+        profile, account_activated, first_login = user.get_data()
+        users.append({'profile': profile, 'account_activated': account_activated, 'first_login': first_login})
     logger.debug('Get all users from db. Number of users : {}'.format(len(users)))
 
     return users
@@ -37,12 +40,11 @@ def get_by_mail(mail) -> User:
         raise UserNotFound
 
 
-def add_user(email, team) -> dict:
-    try:
-        user = User.create(email=email, team=team)
-        return user.get_identity()
-    except IntegrityError:
-        raise EmailAddressAlreadyTaken
+def update_personal_info(user_id, field, info):
+    user = get(user_id)
+    setattr(user, field, info)
+    user.save()
+    return user.get_data()
 
 
 def delete_user(user_id) -> bool:
@@ -53,3 +55,18 @@ def delete_user(user_id) -> bool:
         return True
     except DoesNotExist:
         raise UserNotFound
+
+
+def update_profile_picture(user_id, profile_picture):
+    user = get(user_id)
+    if 'filepath' in user.picture:
+        former_file_path = user.picture.split('=')[1]
+        storage.delete_object(Key=former_file_path, Bucket='template-storage')
+    new_picture_id = uuid.uuid4().hex
+    file_path = 'profile-pictures/{}'.format(new_picture_id)
+    storage.upload_fileobj(profile_picture, 'template-storage', file_path)
+    user.picture = '{}/storage/download?filepath={}'.format(config['back_root_url'], file_path)
+    user.save()
+    profile, account_activated, first_login = user.get_data()
+
+    return {'profile': profile, 'account_activated': account_activated, 'first_login': first_login}
